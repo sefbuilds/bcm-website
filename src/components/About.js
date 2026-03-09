@@ -11,7 +11,7 @@ function About() {
               <div className="about-image-text">Mallorca, Spanje</div>
             </div>
             <div className="about-stats">
-              <div className="stat-number">150+</div>
+              <div className="stat-number">40+</div>
               <div className="stat-label">Actieve Leden</div>
             </div>
           </div>
