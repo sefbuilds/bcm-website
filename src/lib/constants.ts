@@ -6,7 +6,8 @@ export type NavItem = {
 export const NAV_ITEMS: NavItem[] = [
   { label: "Over ons", href: "/over-ons" },
   { label: "Events", href: "/events" },
-  { label: "Lid worden", href: "/lid-worden" },
+  { label: "Leden", href: "/leden" },
+  { label: "Sponsors", href: "/sponsors" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -305,6 +306,34 @@ export const MEMBERS: Member[] = [
     company: "Finca Deià Collection",
     location: "Deià",
     initials: "SC",
+  },
+  {
+    name: "Bart Dekker",
+    role: "Horeca-ondernemer",
+    company: "Dekker Hospitality",
+    location: "Port d'Andratx",
+    initials: "BD",
+  },
+  {
+    name: "Yara Peeters",
+    role: "Grafisch ontwerper",
+    company: "Studio Peeters",
+    location: "Palma",
+    initials: "YP",
+  },
+  {
+    name: "Wouter Segers",
+    role: "Private banker",
+    company: "Segers Wealth",
+    location: "Palma",
+    initials: "WS",
+  },
+  {
+    name: "Maaike van Leeuwen",
+    role: "Event manager",
+    company: "VL Events Mallorca",
+    location: "Santa Ponsa",
+    initials: "ML",
   },
 ];
 

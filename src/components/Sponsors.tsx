@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { SPONSORS } from "@/lib/constants";
 import Reveal from "./Reveal";
 import Marquee from "./Marquee";
@@ -34,6 +36,19 @@ export default function Sponsors() {
               Zij maken onze bijeenkomsten mogelijk en versterken het
               Nederlandstalige ondernemersnetwerk op Mallorca.
             </p>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <Link
+              href="/sponsors"
+              className="group mt-6 inline-flex items-center gap-1.5 text-terracotta hover:text-terracotta-light font-medium"
+            >
+              Alle sponsors & partner worden
+              <ArrowUpRight
+                size={16}
+                className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                aria-hidden="true"
+              />
+            </Link>
           </Reveal>
         </div>
 
