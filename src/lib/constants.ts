@@ -34,12 +34,12 @@ export const STOCK_IMAGES = {
   yachtHarbor: UNSPLASH("photo-1503785640985-f62e3aeee448"),
   wineCheers: UNSPLASH("photo-1519671482749-fd09be7ccebf"),
   terraceView: UNSPLASH("photo-1414235077428-338989a2e8c0"),
-  palmaStreets: UNSPLASH("photo-1596834025097-0c73bbe16d67"),
+  palmaStreets: UNSPLASH("photo-1518548419970-58e3b4079ab2"),
   oliveGrove: UNSPLASH("photo-1500530855697-b586d89ba3ee"),
   coastSunset: UNSPLASH("photo-1506929562872-bb421503ef21"),
   businessMeeting: UNSPLASH("photo-1556761175-5973dc0f32e7"),
   luxuryInterior: UNSPLASH("photo-1564501049412-61c2a3083791"),
-  mallorcaCoast: UNSPLASH("photo-1570135056669-38e38e0d6dc1", 2000),
+  mallorcaCoast: UNSPLASH("photo-1519046904884-53103b34b206", 2000),
   candlelitDinner: UNSPLASH("photo-1529156069898-49953e39b3ac"),
 };
 
