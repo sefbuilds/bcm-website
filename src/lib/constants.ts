@@ -24,6 +24,36 @@ export const SITE_INFO = {
   facebookUrl: "https://facebook.com",
 };
 
+const UNSPLASH = (id: string, w = 1600) =>
+  `https://images.unsplash.com/${id}?w=${w}&auto=format&fit=crop&q=80`;
+
+export const STOCK_IMAGES = {
+  heroAtmosphere: UNSPLASH("photo-1534430480872-3498386e7856", 2000),
+  mediterraneanDinner: UNSPLASH("photo-1530103862676-de8c9debad1d", 1400),
+  fincaMallorca: UNSPLASH("photo-1601581875039-e899893d520c", 1400),
+  yachtHarbor: UNSPLASH("photo-1503785640985-f62e3aeee448"),
+  wineCheers: UNSPLASH("photo-1519671482749-fd09be7ccebf"),
+  terraceView: UNSPLASH("photo-1414235077428-338989a2e8c0"),
+  palmaStreets: UNSPLASH("photo-1596834025097-0c73bbe16d67"),
+  oliveGrove: UNSPLASH("photo-1500530855697-b586d89ba3ee"),
+  coastSunset: UNSPLASH("photo-1506929562872-bb421503ef21"),
+  businessMeeting: UNSPLASH("photo-1556761175-5973dc0f32e7"),
+  luxuryInterior: UNSPLASH("photo-1564501049412-61c2a3083791"),
+  mallorcaCoast: UNSPLASH("photo-1570135056669-38e38e0d6dc1", 2000),
+  candlelitDinner: UNSPLASH("photo-1529156069898-49953e39b3ac"),
+};
+
+export const GALLERY_IMAGES = [
+  { src: STOCK_IMAGES.mediterraneanDinner, alt: "Mediterraan diner bij kaarslicht" },
+  { src: STOCK_IMAGES.wineCheers, alt: "Proosten met wijn" },
+  { src: STOCK_IMAGES.yachtHarbor, alt: "Jachthaven Mallorca" },
+  { src: STOCK_IMAGES.terraceView, alt: "Terras met uitzicht" },
+  { src: STOCK_IMAGES.palmaStreets, alt: "Straten van Palma" },
+  { src: STOCK_IMAGES.coastSunset, alt: "Kust bij zonsondergang" },
+  { src: STOCK_IMAGES.oliveGrove, alt: "Olijfgaard" },
+  { src: STOCK_IMAGES.candlelitDinner, alt: "Diner bij kaarslicht" },
+];
+
 export const MOTTO_LINES = [
   "kunnen we meer",
   "weten we meer",

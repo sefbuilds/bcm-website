@@ -9,7 +9,7 @@ import Testimonial from "@/components/Testimonial";
 import Sponsors from "@/components/Sponsors";
 import Bestuur from "@/components/Bestuur";
 import CTABanner from "@/components/CTABanner";
-import { SITE_INFO } from "@/lib/constants";
+import { SITE_INFO, STOCK_IMAGES } from "@/lib/constants";
 
 export default function Home() {
   return (
@@ -31,7 +31,8 @@ export default function Home() {
         italicWord="zakelijke thuis"
         highlight="Warme gesprekken, oprechte connecties, échte samenwerkingen."
         body="Wat begon als een informele groep is uitgegroeid tot een actieve business club voor Nederlanders, Vlamingen en Zuid-Afrikanen op Mallorca. Onder het genot van een hapje en drankje delen we kennis, verkennen we samenwerkingen en bouwen we aan een sterk professioneel netwerk."
-        imageLabel="Sfeerbeeld"
+        imageLabel="Mediterraans diner op Mallorca"
+        imageUrl={STOCK_IMAGES.mediterraneanDinner}
       />
 
       <Motto />

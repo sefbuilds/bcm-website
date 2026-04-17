@@ -1,10 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ArrowUpRight, Calendar, MapPin, Users } from "lucide-react";
 import AuroraBg from "./AuroraBg";
 import LiveTime from "./LiveTime";
 import Reveal from "./Reveal";
 import Marquee from "./Marquee";
-import { NEXT_EVENT, MEMBERS_TOTAL } from "@/lib/constants";
+import { NEXT_EVENT, MEMBERS_TOTAL, STOCK_IMAGES } from "@/lib/constants";
 
 type Props = {
   title: string;
@@ -134,9 +135,12 @@ export default function Hero({
         {showBento && !compact && (
           <Reveal delay={0.35}>
             <div className="mt-16 md:mt-24 grid gap-3 md:grid-cols-12">
-              <BentoNextEvent className="md:col-span-6" />
-              <BentoMembers className="md:col-span-3" />
-              <BentoLocation className="md:col-span-3" />
+              <BentoNextEvent className="md:col-span-5" />
+              <BentoAtmosphere className="md:col-span-4" />
+              <div className="md:col-span-3 grid gap-3">
+                <BentoMembers />
+                <BentoLocation />
+              </div>
             </div>
           </Reveal>
         )}
@@ -169,6 +173,46 @@ export default function Hero({
         </div>
       )}
     </section>
+  );
+}
+
+function BentoAtmosphere({ className }: { className?: string }) {
+  return (
+    <Link
+      href="/events"
+      className={`group relative rounded-2xl overflow-hidden min-h-[200px] ${className}`}
+    >
+      <Image
+        src={STOCK_IMAGES.mallorcaCoast}
+        alt="Kust van Mallorca"
+        fill
+        className="object-cover transition-transform duration-700 group-hover:scale-105"
+        sizes="(max-width: 768px) 100vw, 33vw"
+        priority
+      />
+      <div className="absolute inset-0 bg-linear-to-t from-ink/85 via-ink/30 to-ink/20" />
+      <div className="relative p-7 md:p-8 h-full flex flex-col justify-between">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-gold">
+            <MapPin size={12} aria-hidden="true" />
+            Mallorca
+          </div>
+          <ArrowUpRight
+            size={16}
+            className="text-pearl transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+            aria-hidden="true"
+          />
+        </div>
+        <div>
+          <div className="font-heading font-semibold text-pearl text-2xl md:text-3xl leading-tight tracking-[-0.02em]">
+            Het hele jaar door
+          </div>
+          <div className="mt-2 text-[11px] tracking-[0.24em] uppercase text-pearl/80">
+            Borrels · Diners · Masterclasses
+          </div>
+        </div>
+      </div>
+    </Link>
   );
 }
 
@@ -221,26 +265,26 @@ function BentoMembers({ className }: { className?: string }) {
   return (
     <Link
       href="/lid-worden"
-      className={`group glass rounded-2xl p-7 md:p-8 flex flex-col justify-between min-h-[200px] transition-all hover:bg-pearl/[0.07] ${className}`}
+      className={`group glass rounded-2xl p-5 md:p-6 flex flex-col justify-between min-h-[94px] transition-all hover:bg-pearl/[0.07] ${className}`}
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
           <Users size={12} aria-hidden="true" />
-          Actieve leden
+          Leden
         </div>
         <ArrowUpRight
-          size={16}
+          size={14}
           className="text-pearl-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-pearl"
           aria-hidden="true"
         />
       </div>
 
-      <div className="mt-6">
-        <div className="font-heading font-semibold text-pearl text-6xl md:text-7xl leading-none tracking-[-0.04em]">
+      <div className="mt-3 flex items-baseline gap-3">
+        <div className="font-heading font-semibold text-pearl text-4xl md:text-5xl leading-none tracking-[-0.04em]">
           {MEMBERS_TOTAL}
         </div>
-        <div className="mt-3 text-[11px] tracking-widest uppercase text-pearl-60">
-          Ondernemers · Vlamingen · Zuid-Afrikanen
+        <div className="text-[10px] tracking-widest uppercase text-pearl-60">
+          Ondernemers
         </div>
       </div>
     </Link>
@@ -250,27 +294,22 @@ function BentoMembers({ className }: { className?: string }) {
 function BentoLocation({ className }: { className?: string }) {
   return (
     <div
-      className={`glass rounded-2xl p-7 md:p-8 flex flex-col justify-between min-h-[200px] ${className}`}
+      className={`glass rounded-2xl p-5 md:p-6 flex flex-col justify-between min-h-[94px] ${className}`}
     >
       <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
         <MapPin size={12} aria-hidden="true" />
         Basis
       </div>
 
-      <div className="mt-6">
-        <div className="font-heading font-semibold text-pearl text-2xl md:text-3xl leading-tight tracking-[-0.02em]">
+      <div className="mt-3">
+        <div className="font-heading font-semibold text-pearl text-xl md:text-2xl leading-tight tracking-[-0.02em]">
           Palma de Mallorca
         </div>
-        <div className="mt-3 flex items-center gap-2 text-[11px] tracking-widest uppercase text-pearl-60">
+        <div className="mt-2 flex items-center gap-2 text-[10px] tracking-widest uppercase text-pearl-60">
           <span>39.57° N</span>
           <span className="h-1 w-1 rounded-full bg-pearl-60" />
           <span>2.65° E</span>
         </div>
-      </div>
-
-      <div className="mt-6 flex items-center gap-2 text-xs text-pearl-60">
-        <span className="h-1.5 w-1.5 rounded-full bg-olive" />
-        Balearen · Spanje
       </div>
     </div>
   );
