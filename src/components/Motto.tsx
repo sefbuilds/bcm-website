@@ -47,12 +47,15 @@ export default function Motto() {
 
         <Reveal delay={0.1}>
           <blockquote className="mt-10 font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-semibold text-pearl tracking-[-0.03em] leading-[1] text-balance max-w-6xl">
-            <em className="italic font-light text-terracotta">Samen</em>{" "}
-            kunnen we meer,{" "}
-            <em className="italic font-light text-terracotta">samen</em>{" "}
-            weten we meer,{" "}
-            <em className="italic font-light text-terracotta">samen</em>{" "}
-            verdienen we meer.
+            Samen{" "}
+            <em className="italic font-light text-terracotta">kunnen</em>{" "}
+            we meer, samen{" "}
+            <em className="italic font-light text-terracotta">weten</em>{" "}
+            we meer, samen{" "}
+            <em className="italic font-light text-terracotta">
+              verdienen
+            </em>{" "}
+            we meer.
           </blockquote>
         </Reveal>
       </div>
