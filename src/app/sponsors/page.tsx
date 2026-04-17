@@ -1,10 +1,29 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowUpRight, Handshake, Users, Calendar } from "lucide-react";
+import Image from "next/image";
+import { ArrowUpRight, Handshake, Users, Calendar, Globe } from "lucide-react";
+
+function LinkedinIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.45 3H3.55A.55.55 0 0 0 3 3.55v16.9c0 .303.247.55.55.55h16.9a.55.55 0 0 0 .55-.55V3.55A.55.55 0 0 0 20.45 3zM8.3 18.48H5.54V9.6H8.3v8.88zM6.92 8.43a1.6 1.6 0 1 1 0-3.2 1.6 1.6 0 0 1 0 3.2zm11.56 10.05h-2.76v-4.32c0-1.03-.02-2.36-1.44-2.36-1.44 0-1.66 1.12-1.66 2.28v4.4h-2.76V9.6h2.64v1.22h.04c.37-.7 1.27-1.44 2.6-1.44 2.78 0 3.3 1.83 3.3 4.22v4.88z" />
+    </svg>
+  );
+}
+
+function InstagramIcon({ size = 14 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.5" cy="6.5" r="0.8" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import Marquee from "@/components/Marquee";
-import { SPONSORS, SITE_INFO } from "@/lib/constants";
+import { SPONSORS, HOOFDSPONSORS, SITE_INFO } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Sponsors & Partners",
@@ -34,10 +53,12 @@ const PARTNER_BENEFITS = [
 ];
 
 export default function SponsorsPage() {
-  const hoofdsponsors = SPONSORS.filter((s) => s.tier === "hoofdsponsor");
   const partners = SPONSORS.filter((s) => s.tier === "partner");
   const vrienden = SPONSORS.filter((s) => s.tier === "vriend");
-  const allNames = SPONSORS.map((s) => s.name);
+  const allNames = [
+    ...HOOFDSPONSORS.map((h) => h.company),
+    ...SPONSORS.map((s) => s.name),
+  ];
 
   return (
     <>
@@ -70,20 +91,76 @@ export default function SponsorsPage() {
           </div>
 
           <div className="mt-14 grid gap-3 md:grid-cols-2">
-            {hoofdsponsors.map((s, i) => (
+            {HOOFDSPONSORS.map((s, i) => (
               <Reveal key={s.name} delay={i * 0.08}>
-                <div className="group glass rounded-2xl px-8 py-16 md:px-12 md:py-20 flex flex-col items-center justify-center text-center transition-all hover:bg-pearl/[0.07] relative overflow-hidden">
+                <article className="group relative glass rounded-2xl p-8 md:p-10 transition-all hover:bg-pearl/[0.07] overflow-hidden h-full flex flex-col">
                   <div
-                    className="absolute inset-0 bg-linear-to-br from-terracotta/0 to-gold/0 transition-all duration-500 group-hover:from-terracotta/10 group-hover:to-gold/8"
+                    className="absolute inset-0 bg-linear-to-br from-terracotta/0 to-gold/0 transition-all duration-500 group-hover:from-terracotta/8 group-hover:to-gold/6 pointer-events-none"
                     aria-hidden="true"
                   />
-                  <span className="relative text-[10px] tracking-[0.24em] uppercase text-gold mb-4">
-                    Hoofdsponsor
-                  </span>
-                  <span className="relative font-heading text-3xl md:text-4xl font-semibold text-pearl tracking-[-0.02em]">
-                    {s.name}
-                  </span>
-                </div>
+
+                  <div className="relative flex items-start gap-6">
+                    <div className="relative h-20 w-20 md:h-24 md:w-24 shrink-0 rounded-full overflow-hidden hairline">
+                      <Image
+                        src={s.image}
+                        alt={s.name}
+                        fill
+                        className="object-cover"
+                        sizes="96px"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="text-[10px] tracking-[0.24em] uppercase text-gold">
+                        Hoofdsponsor
+                      </div>
+                      <h3 className="mt-2 font-heading text-2xl md:text-3xl font-semibold text-pearl tracking-[-0.02em] leading-tight">
+                        {s.name}
+                      </h3>
+                      <div className="mt-1 text-pearl-80">{s.company}</div>
+                    </div>
+                  </div>
+
+                  <div className="relative mt-8 pt-6 hairline-t flex flex-wrap gap-x-5 gap-y-3 text-sm">
+                    <a
+                      href={s.website}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group/link inline-flex items-center gap-2 text-pearl hover:text-terracotta transition-colors"
+                    >
+                      <Globe size={14} aria-hidden="true" />
+                      {s.websiteLabel}
+                      <ArrowUpRight
+                        size={12}
+                        className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+                        aria-hidden="true"
+                      />
+                    </a>
+                    {s.linkedin && (
+                      <a
+                        href={s.linkedin}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-pearl-80 hover:text-terracotta transition-colors"
+                        aria-label={`LinkedIn van ${s.name}`}
+                      >
+                        <LinkedinIcon size={14} />
+                        LinkedIn
+                      </a>
+                    )}
+                    {s.instagram && (
+                      <a
+                        href={s.instagram}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-pearl-80 hover:text-terracotta transition-colors"
+                        aria-label={`Instagram van ${s.name}`}
+                      >
+                        <InstagramIcon size={14} />
+                        Instagram
+                      </a>
+                    )}
+                  </div>
+                </article>
               </Reveal>
             ))}
           </div>
