@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Menu, X, ArrowUpRight } from "lucide-react";
 import { NAV_ITEMS, SITE_INFO } from "@/lib/constants";
+import LiveTime from "./LiveTime";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -41,18 +42,27 @@ export default function Navbar() {
         className="container-site flex items-center justify-between py-4"
         aria-label="Hoofdnavigatie"
       >
-        <Link
-          href="/"
-          className="inline-flex items-baseline gap-2"
-          aria-label={`${SITE_INFO.name} — Home`}
-        >
-          <span className="font-heading font-bold text-lg tracking-[0.24em] text-pearl">
-            {SITE_INFO.name}
+        <div className="flex items-center gap-4">
+          <Link
+            href="/"
+            className="inline-flex items-baseline gap-2"
+            aria-label={`${SITE_INFO.name} — Home`}
+          >
+            <span className="font-heading font-bold text-lg tracking-[0.24em] text-pearl">
+              {SITE_INFO.name}
+            </span>
+            <span className="hidden xl:inline text-[9px] tracking-[0.3em] uppercase text-pearl-60">
+              Mallorca
+            </span>
+          </Link>
+          <span
+            className="hidden xl:inline-flex items-center gap-2 pl-4 ml-1 border-l border-hairline text-[10px] tracking-[0.24em] uppercase text-pearl-60"
+            aria-label="Lokale tijd Palma"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-terracotta animate-pulse" />
+            <LiveTime className="text-pearl font-medium" showSeconds={false} />
           </span>
-          <span className="hidden xl:inline text-[9px] tracking-[0.3em] uppercase text-pearl-60">
-            Mallorca
-          </span>
-        </Link>
+        </div>
 
         <ul className="hidden lg:flex items-center gap-1 glass rounded-full px-2 py-1.5">
           {NAV_ITEMS.map((item) => {

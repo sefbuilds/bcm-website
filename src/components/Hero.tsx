@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ArrowUpRight, Calendar, MapPin, Users } from "lucide-react";
 import AuroraBg from "./AuroraBg";
-import LiveTime from "./LiveTime";
 import Reveal from "./Reveal";
 import Marquee from "./Marquee";
 import { NEXT_EVENT, MEMBERS_TOTAL, STOCK_IMAGES } from "@/lib/constants";
@@ -43,7 +42,7 @@ export default function Hero({
 }: Props) {
   return (
     <section
-      className={`relative overflow-hidden ${
+      className={`relative overflow-hidden pt-20 md:pt-24 ${
         compact ? "min-h-[55vh]" : "min-h-[100vh]"
       }`}
       aria-label="Hero"
@@ -55,22 +54,9 @@ export default function Hero({
         aria-hidden="true"
       />
 
-      <div className="relative z-10 hairline-b">
-        <div className="container-site flex items-center justify-between py-4 text-[10px] md:text-[11px] tracking-[0.2em] uppercase text-pearl-60 font-medium">
-          <span className="inline-flex items-center gap-3">
-            <span className="h-1.5 w-1.5 rounded-full bg-terracotta animate-pulse" />
-            Live · Palma ·{" "}
-            <LiveTime className="text-pearl" showSeconds />
-          </span>
-          <span className="hidden sm:inline">
-            NBCM · Est. 2019 · Mallorca
-          </span>
-        </div>
-      </div>
-
       <div
         className={`relative z-10 container-site ${
-          compact ? "py-20 md:py-24" : "pt-20 pb-14 md:pt-28 md:pb-20"
+          compact ? "py-16 md:py-20" : "pt-8 pb-14 md:pt-12 md:pb-20"
         }`}
       >
         <Reveal>
