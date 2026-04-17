@@ -119,6 +119,31 @@ export const NEXT_EVENT: Event = {
   tag: "Netwerken",
 };
 
+export type EventWithPhotos = Event & {
+  photos?: string[];
+};
+
+export const RECENT_EVENT: EventWithPhotos = {
+  id: "networkborrel-26-mrt-2026",
+  day: "26",
+  month: "MRT",
+  year: "2026",
+  title: "Voorjaarsborrel & Netwerkavond",
+  location: "Palma de Mallorca",
+  time: "18:30 - 22:00",
+  description:
+    "Een warme voorjaarsavond met leden, nieuwe gezichten en genodigden. Veel goede gesprekken, introducties en plannen voor de komende maanden.",
+  tag: "Netwerken",
+  photos: [
+    "/events/26-mrt-2026/networkborrel-01.jpeg",
+    "/events/26-mrt-2026/networkborrel-02.jpeg",
+    "/events/26-mrt-2026/networkborrel-03.jpeg",
+    "/events/26-mrt-2026/networkborrel-04.jpeg",
+    "/events/26-mrt-2026/networkborrel-05.jpeg",
+    "/events/26-mrt-2026/networkborrel-06.jpeg",
+  ],
+};
+
 export const PAST_EVENTS: Event[] = [
   {
     id: "lente-diner-2026",

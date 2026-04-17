@@ -4,7 +4,7 @@ import { ArrowRight, ArrowUpRight, Calendar, MapPin, Users } from "lucide-react"
 import AuroraBg from "./AuroraBg";
 import Reveal from "./Reveal";
 import Marquee from "./Marquee";
-import { NEXT_EVENT, MEMBERS_TOTAL, STOCK_IMAGES } from "@/lib/constants";
+import { NEXT_EVENT, MEMBERS_TOTAL, RECENT_EVENT, STOCK_IMAGES } from "@/lib/constants";
 
 type Props = {
   title: string;
@@ -169,19 +169,19 @@ function BentoAtmosphere({ className }: { className?: string }) {
       className={`group relative rounded-2xl overflow-hidden min-h-[200px] ${className}`}
     >
       <Image
-        src={STOCK_IMAGES.mallorcaCoast}
-        alt="Kust van Mallorca"
+        src={RECENT_EVENT.photos?.[0] ?? STOCK_IMAGES.mallorcaCoast}
+        alt={`Sfeerbeeld ${RECENT_EVENT.title}`}
         fill
         className="object-cover transition-transform duration-700 group-hover:scale-105"
         sizes="(max-width: 768px) 100vw, 33vw"
         priority
       />
-      <div className="absolute inset-0 bg-linear-to-t from-ink/85 via-ink/30 to-ink/20" />
+      <div className="absolute inset-0 bg-linear-to-t from-ink/90 via-ink/40 to-ink/20" />
       <div className="relative p-7 md:p-8 h-full flex flex-col justify-between">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-gold">
-            <MapPin size={12} aria-hidden="true" />
-            Mallorca
+            <Calendar size={12} aria-hidden="true" />
+            Laatste event
           </div>
           <ArrowUpRight
             size={16}
@@ -190,11 +190,12 @@ function BentoAtmosphere({ className }: { className?: string }) {
           />
         </div>
         <div>
-          <div className="font-heading font-semibold text-pearl text-2xl md:text-3xl leading-tight tracking-[-0.02em]">
-            Het hele jaar door
+          <div className="font-heading font-semibold text-pearl text-xl md:text-2xl leading-tight tracking-[-0.02em]">
+            {RECENT_EVENT.title}
           </div>
           <div className="mt-2 text-[11px] tracking-[0.24em] uppercase text-pearl/80">
-            Borrels · Diners · Masterclasses
+            {RECENT_EVENT.day} {RECENT_EVENT.month} {RECENT_EVENT.year} ·{" "}
+            {RECENT_EVENT.location}
           </div>
         </div>
       </div>
