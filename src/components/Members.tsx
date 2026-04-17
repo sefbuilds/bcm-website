@@ -30,10 +30,10 @@ export default function Members() {
           </div>
           <Reveal delay={0.15}>
             <Link
-              href="/lid-worden"
+              href="/leden"
               className="group inline-flex items-center gap-1.5 text-terracotta hover:text-terracotta-light font-medium"
             >
-              Word lid
+              Alle leden
               <ArrowUpRight
                 size={16}
                 className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
@@ -81,10 +81,18 @@ export default function Members() {
         </div>
 
         <Reveal delay={0.3}>
-          <p className="mt-10 text-sm text-pearl-60">
-            En nog {MEMBERS_TOTAL - MEMBERS.length} andere leden uit de
-            Nederlandstalige gemeenschap op Mallorca.
-          </p>
+          <div className="mt-10 flex flex-col sm:flex-row gap-4 sm:items-center">
+            <p className="text-sm text-pearl-60">
+              En nog {MEMBERS_TOTAL - MEMBERS.length} andere leden uit de
+              Nederlandstalige gemeenschap op Mallorca.
+            </p>
+            <Link
+              href="/leden"
+              className="inline-flex items-center gap-1.5 text-terracotta hover:text-terracotta-light font-medium text-sm"
+            >
+              Bekijk ledenoverzicht →
+            </Link>
+          </div>
         </Reveal>
       </div>
     </section>
