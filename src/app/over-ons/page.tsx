@@ -4,7 +4,7 @@ import IntroSection from "@/components/IntroSection";
 import Bestuur from "@/components/Bestuur";
 import CTABanner from "@/components/CTABanner";
 import Reveal from "@/components/Reveal";
-import { AMBASSADOR } from "@/lib/constants";
+import { AMBASSADOR, STOCK_IMAGES } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Over ons",
@@ -29,7 +29,8 @@ export default function OverOns() {
           "NBCM ontstond in 2019 uit de behoefte van een paar ondernemers om in hun eigen taal zaken te kunnen bespreken en elkaar echt te leren kennen. Wat begon rond een lange tafel is uitgegroeid tot een actieve club met leden uit Nederland, Vlaanderen en Zuid-Afrika.",
           "Vandaag organiseren we maandelijks borrels, diners en masterclasses op de mooiste plekken van het eiland. Geen verkooppraatjes, wel oprechte gesprekken, kennis delen en samenwerkingen die ontstaan uit vertrouwen.",
         ]}
-        imageLabel="Mallorca"
+        imageLabel="Finca op Mallorca"
+        imageUrl={STOCK_IMAGES.fincaMallorca}
       />
 
       <section className="bg-ink-2 hairline-t hairline-b">

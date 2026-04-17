@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Reveal from "./Reveal";
 
 type Props = {
@@ -5,6 +6,7 @@ type Props = {
   heading: string;
   body: string | string[];
   imageLabel?: string;
+  imageUrl?: string;
   highlight?: string;
   italicWord?: string;
 };
@@ -29,6 +31,7 @@ export default function IntroSection({
   heading,
   body,
   imageLabel = "Mallorca",
+  imageUrl,
   highlight,
   italicWord,
 }: Props) {
@@ -75,17 +78,31 @@ export default function IntroSection({
 
           <div className="md:col-span-5">
             <Reveal delay={0.18} direction="left">
-              <div className="relative rounded-2xl overflow-hidden glass aspect-[4/5] flex items-center justify-center">
-                <div className="noise" />
-                <div className="absolute inset-0 bg-linear-to-br from-terracotta/15 via-transparent to-gold/10 pointer-events-none" />
-                <div className="relative text-center px-6">
-                  <div className="font-heading text-6xl md:text-7xl font-semibold text-pearl/20 tracking-[-0.04em]">
-                    2019
+              <div className="relative rounded-2xl overflow-hidden aspect-[4/5]">
+                {imageUrl ? (
+                  <>
+                    <Image
+                      src={imageUrl}
+                      alt={imageLabel}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 40vw"
+                    />
+                    <div className="absolute inset-0 bg-linear-to-t from-ink/30 via-transparent to-transparent pointer-events-none" />
+                  </>
+                ) : (
+                  <div className="absolute inset-0 glass flex items-center justify-center">
+                    <div className="noise" />
+                    <div className="relative text-center px-6">
+                      <div className="font-heading text-6xl md:text-7xl font-semibold text-pearl/20 tracking-[-0.04em]">
+                        2019
+                      </div>
+                      <div className="mt-2 text-[11px] tracking-[0.24em] uppercase text-pearl-60">
+                        {imageLabel}
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-2 text-[11px] tracking-[0.24em] uppercase text-pearl-60">
-                    {imageLabel}
-                  </div>
-                </div>
+                )}
               </div>
             </Reveal>
           </div>
