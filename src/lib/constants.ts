@@ -364,16 +364,45 @@ export const MEMBERS: Member[] = [
 
 export const MEMBERS_TOTAL = 42;
 
-export type SponsorTier = "hoofdsponsor" | "partner" | "vriend";
+export type SponsorTier = "partner" | "vriend";
 
 export type Sponsor = {
   name: string;
   tier: SponsorTier;
 };
 
+export type Hoofdsponsor = {
+  name: string;
+  company: string;
+  website: string;
+  websiteLabel: string;
+  linkedin?: string;
+  instagram?: string;
+  image: string;
+};
+
+export const HOOFDSPONSORS: Hoofdsponsor[] = [
+  {
+    name: "Youssef El-Idrissi",
+    company: "Astrelon",
+    website: "https://astrelon.io",
+    websiteLabel: "astrelon.io",
+    linkedin: "https://www.linkedin.com/in/sefbuilds/",
+    instagram: "https://instagram.com/sefbuilds",
+    image: "/sponsors/youssef-el-idrissi.png",
+  },
+  {
+    name: "Stefan Beekwilder",
+    company: "Clarosea",
+    website: "https://clarosea.com",
+    websiteLabel: "clarosea.com",
+    linkedin: "https://www.linkedin.com/in/stefan-beekwilder-a2261341/",
+    instagram: "https://instagram.com/sbalear",
+    image: "/sponsors/stefan-beekwilder.png",
+  },
+];
+
 export const SPONSORS: Sponsor[] = [
-  { name: "Mallorca Invest Group", tier: "hoofdsponsor" },
-  { name: "Bendinat Bay Partners", tier: "hoofdsponsor" },
   { name: "Nordico Fiscal Advisors", tier: "partner" },
   { name: "Palma Legal", tier: "partner" },
   { name: "Atlantic Yacht Brokers", tier: "partner" },

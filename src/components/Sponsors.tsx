@@ -1,17 +1,20 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
-import { SPONSORS } from "@/lib/constants";
+import { SPONSORS, HOOFDSPONSORS } from "@/lib/constants";
 import Reveal from "./Reveal";
 import Marquee from "./Marquee";
 
 export default function Sponsors() {
-  const hoofdsponsors = SPONSORS.filter((s) => s.tier === "hoofdsponsor");
   const partners = SPONSORS.filter((s) => s.tier === "partner");
   const vrienden = SPONSORS.filter((s) => s.tier === "vriend");
-  const allNames = SPONSORS.map((s) => s.name);
+  const allNames = [
+    ...HOOFDSPONSORS.map((h) => h.company),
+    ...SPONSORS.map((s) => s.name),
+  ];
 
   return (
-    <section className="bg-ink relative">
+    <section className="bg-sand relative">
       <div className="container-site py-24 md:py-32">
         <div className="max-w-3xl">
           <Reveal>
@@ -56,19 +59,38 @@ export default function Sponsors() {
           <Reveal delay={0.2}>
             <TierHeader label="Hoofdsponsors" />
             <div className="mt-6 grid gap-3 md:grid-cols-2">
-              {hoofdsponsors.map((s) => (
-                <div
+              {HOOFDSPONSORS.map((s) => (
+                <Link
                   key={s.name}
-                  className="group glass rounded-2xl px-8 py-14 md:px-10 md:py-16 flex items-center justify-center text-center transition-all hover:bg-pearl/[0.07] relative overflow-hidden"
+                  href="/sponsors"
+                  className="group glass rounded-2xl p-6 md:p-8 transition-all hover:bg-pearl/[0.07] flex items-center gap-5"
                 >
-                  <div
-                    className="absolute inset-0 bg-linear-to-br from-terracotta/0 to-gold/0 transition-all duration-500 group-hover:from-terracotta/8 group-hover:to-gold/5"
+                  <div className="relative h-16 w-16 md:h-20 md:w-20 shrink-0 rounded-full overflow-hidden hairline">
+                    <Image
+                      src={s.image}
+                      alt={s.name}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-[10px] tracking-[0.24em] uppercase text-gold">
+                      Hoofdsponsor
+                    </div>
+                    <h3 className="mt-1 font-heading text-xl md:text-2xl font-semibold text-pearl tracking-[-0.02em] leading-tight truncate">
+                      {s.company}
+                    </h3>
+                    <div className="mt-1 text-sm text-pearl-60">
+                      {s.name}
+                    </div>
+                  </div>
+                  <ArrowUpRight
+                    size={16}
+                    className="shrink-0 text-pearl-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-pearl"
                     aria-hidden="true"
                   />
-                  <span className="relative font-heading text-2xl md:text-3xl font-semibold text-pearl tracking-[-0.02em]">
-                    {s.name}
-                  </span>
-                </div>
+                </Link>
               ))}
             </div>
           </Reveal>
