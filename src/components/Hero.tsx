@@ -1,10 +1,23 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, ArrowUpRight, Calendar, MapPin, Users } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Calendar,
+  MapPin,
+  Users,
+} from "lucide-react";
 import AuroraBg from "./AuroraBg";
 import Reveal from "./Reveal";
 import Marquee from "./Marquee";
-import { NEXT_EVENT, MEMBERS_TOTAL, RECENT_EVENT, STOCK_IMAGES } from "@/lib/constants";
+import {
+  getNextEvent,
+  getFeaturedRecentEvent,
+  getMemberStats,
+  formatEventDay,
+  type DBEvent,
+} from "@/lib/data";
+import { STOCK_IMAGES } from "@/lib/constants";
 
 type Props = {
   title: string;
@@ -31,7 +44,7 @@ function renderTitle(title: string, italicWord?: string) {
   );
 }
 
-export default function Hero({
+export default async function Hero({
   title,
   subtitle,
   ctaText,
@@ -40,6 +53,14 @@ export default function Hero({
   italicWord,
   showBento = false,
 }: Props) {
+  const [nextEvent, recentEvent, memberStats] = showBento
+    ? await Promise.all([
+        getNextEvent(),
+        getFeaturedRecentEvent(),
+        getMemberStats(),
+      ])
+    : [null, null, { total: 0, locations: [] }];
+
   return (
     <section
       className={`relative overflow-hidden pt-20 md:pt-24 ${
@@ -62,7 +83,7 @@ export default function Hero({
         <Reveal>
           <div className="flex items-center gap-3">
             <span className="h-px w-12 bg-terracotta" />
-            <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-terracotta">
+            <span className="text-xs font-medium tracking-widest uppercase text-terracotta">
               {compact ? "NBCM" : "Business Club · Mallorca"}
             </span>
           </div>
@@ -70,10 +91,10 @@ export default function Hero({
 
         <Reveal delay={0.08}>
           <h1
-            className={`mt-10 font-heading font-semibold text-pearl tracking-[-0.035em] leading-[0.92] text-balance ${
+            className={`mt-8 font-heading font-semibold text-pearl tracking-[-0.03em] leading-[0.98] text-balance ${
               compact
                 ? "text-5xl md:text-6xl lg:text-7xl"
-                : "text-[2.8rem] sm:text-6xl md:text-7xl lg:text-[7.5rem] xl:text-[9rem]"
+                : "text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8.5rem]"
             }`}
           >
             {renderTitle(title, italicWord)}
@@ -83,7 +104,7 @@ export default function Hero({
         {subtitle && (
           <Reveal delay={0.18}>
             <p
-              className={`mt-8 max-w-2xl text-pearl-80 leading-relaxed ${
+              className={`mt-10 max-w-2xl text-pearl-80 leading-relaxed ${
                 compact ? "text-base md:text-lg" : "text-lg md:text-xl"
               }`}
             >
@@ -97,7 +118,7 @@ export default function Hero({
             <div className="mt-12 flex flex-wrap gap-3">
               <Link
                 href={ctaHref}
-                className="group inline-flex items-center gap-2 rounded-full bg-terracotta px-8 py-4 text-white font-medium transition-all hover:bg-terracotta-light hover:scale-[1.02]"
+                className="group inline-flex items-center gap-2 rounded-full bg-deep-blue px-8 py-4 text-white font-medium transition-colors hover:bg-deep-blue/90"
               >
                 {ctaText}
                 <ArrowRight
@@ -109,7 +130,7 @@ export default function Hero({
               {!compact && (
                 <Link
                   href="/events"
-                  className="inline-flex items-center gap-2 rounded-full glass px-8 py-4 text-pearl font-medium transition-all hover:bg-pearl/10"
+                  className="inline-flex items-center gap-2 rounded-full border border-deep-blue/20 px-8 py-4 text-deep-blue font-medium transition-colors hover:border-deep-blue"
                 >
                   Volgende event
                 </Link>
@@ -121,10 +142,16 @@ export default function Hero({
         {showBento && !compact && (
           <Reveal delay={0.35}>
             <div className="mt-16 md:mt-24 grid gap-3 md:grid-cols-12">
-              <BentoNextEvent className="md:col-span-5" />
-              <BentoAtmosphere className="md:col-span-4" />
+              <BentoNextEvent
+                className="md:col-span-5"
+                event={nextEvent}
+              />
+              <BentoAtmosphere
+                className="md:col-span-4"
+                event={recentEvent}
+              />
               <div className="md:col-span-3 grid gap-3">
-                <BentoMembers />
+                <BentoMembers total={memberStats.total} />
                 <BentoLocation />
               </div>
             </div>
@@ -162,15 +189,25 @@ export default function Hero({
   );
 }
 
-function BentoAtmosphere({ className }: { className?: string }) {
+function BentoAtmosphere({
+  className,
+  event,
+}: {
+  className?: string;
+  event: DBEvent | null;
+}) {
+  const imageSrc =
+    event?.photos?.[0] || event?.hero_image || STOCK_IMAGES.mallorcaCoast;
+  const startParts = event ? formatEventDay(event.start_at) : null;
+
   return (
     <Link
-      href="/events"
+      href={event ? `/events` : "/events"}
       className={`group relative rounded-2xl overflow-hidden min-h-[200px] ${className}`}
     >
       <Image
-        src={RECENT_EVENT.photos?.[0] ?? STOCK_IMAGES.mallorcaCoast}
-        alt={`Sfeerbeeld ${RECENT_EVENT.title}`}
+        src={imageSrc}
+        alt={event ? `Sfeerbeeld ${event.title}` : "Mallorca"}
         fill
         className="object-cover transition-transform duration-700 group-hover:scale-105"
         sizes="(max-width: 768px) 100vw, 33vw"
@@ -181,7 +218,7 @@ function BentoAtmosphere({ className }: { className?: string }) {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-gold">
             <Calendar size={12} aria-hidden="true" />
-            Laatste event
+            {event ? "Laatste event" : "Mallorca"}
           </div>
           <ArrowUpRight
             size={16}
@@ -191,11 +228,12 @@ function BentoAtmosphere({ className }: { className?: string }) {
         </div>
         <div>
           <div className="font-heading font-semibold text-pearl text-xl md:text-2xl leading-tight tracking-[-0.02em]">
-            {RECENT_EVENT.title}
+            {event?.title ?? "Het hele jaar door events"}
           </div>
           <div className="mt-2 text-[11px] tracking-[0.24em] uppercase text-pearl/80">
-            {RECENT_EVENT.day} {RECENT_EVENT.month} {RECENT_EVENT.year} ·{" "}
-            {RECENT_EVENT.location}
+            {event && startParts
+              ? `${startParts.day} ${startParts.month} ${startParts.year} · ${event.location ?? "Mallorca"}`
+              : "Borrels · Diners · Masterclasses"}
           </div>
         </div>
       </div>
@@ -203,10 +241,18 @@ function BentoAtmosphere({ className }: { className?: string }) {
   );
 }
 
-function BentoNextEvent({ className }: { className?: string }) {
+function BentoNextEvent({
+  className,
+  event,
+}: {
+  className?: string;
+  event: DBEvent | null;
+}) {
+  const parts = event ? formatEventDay(event.start_at) : null;
+
   return (
     <Link
-      href="/events"
+      href={event ? `/events/aanmelden?event=${event.slug}` : "/events"}
       className={`group glass rounded-2xl p-7 md:p-8 flex flex-col justify-between min-h-[200px] transition-all hover:bg-pearl/[0.07] ${className}`}
     >
       <div className="flex items-start justify-between">
@@ -221,37 +267,51 @@ function BentoNextEvent({ className }: { className?: string }) {
         />
       </div>
 
-      <div className="mt-6 flex items-baseline gap-4">
-        <span className="font-heading font-semibold text-pearl text-6xl md:text-7xl leading-none tracking-[-0.04em]">
-          {NEXT_EVENT.day}
-        </span>
-        <div>
-          <div className="text-xs tracking-widest uppercase text-pearl">
-            {NEXT_EVENT.month} {NEXT_EVENT.year}
+      {event && parts ? (
+        <>
+          <div className="mt-6 flex items-baseline gap-4">
+            <span className="font-heading font-semibold text-pearl text-6xl md:text-7xl leading-none tracking-[-0.04em]">
+              {parts.day}
+            </span>
+            <div>
+              <div className="text-xs tracking-widest uppercase text-pearl">
+                {parts.month} {parts.year}
+              </div>
+              <div className="text-[11px] text-pearl-60 mt-0.5">
+                {parts.time}
+              </div>
+            </div>
           </div>
-          <div className="text-[11px] text-pearl-60 mt-0.5">
-            {NEXT_EVENT.time}
+          <div className="mt-6">
+            <h3 className="font-heading text-lg md:text-xl font-semibold text-pearl leading-tight">
+              {event.title}
+            </h3>
+            {event.location && (
+              <p className="mt-1 inline-flex items-center gap-1 text-xs text-pearl-60">
+                <MapPin size={11} aria-hidden="true" />
+                {event.location}
+              </p>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="mt-6">
+          <div className="font-heading font-semibold text-pearl text-2xl md:text-3xl leading-tight tracking-[-0.02em]">
+            Volgt binnenkort
+          </div>
+          <div className="mt-3 text-[11px] tracking-widest uppercase text-pearl-60">
+            Nieuwe datum wordt gepland
           </div>
         </div>
-      </div>
-
-      <div className="mt-6">
-        <h3 className="font-heading text-lg md:text-xl font-semibold text-pearl leading-tight">
-          {NEXT_EVENT.title}
-        </h3>
-        <p className="mt-1 inline-flex items-center gap-1 text-xs text-pearl-60">
-          <MapPin size={11} aria-hidden="true" />
-          {NEXT_EVENT.location}
-        </p>
-      </div>
+      )}
     </Link>
   );
 }
 
-function BentoMembers({ className }: { className?: string }) {
+function BentoMembers({ className, total }: { className?: string; total: number }) {
   return (
     <Link
-      href="/lid-worden"
+      href="/leden"
       className={`group glass rounded-2xl p-5 md:p-6 flex flex-col justify-between min-h-[94px] transition-all hover:bg-pearl/[0.07] ${className}`}
     >
       <div className="flex items-start justify-between">
@@ -268,7 +328,7 @@ function BentoMembers({ className }: { className?: string }) {
 
       <div className="mt-3 flex items-baseline gap-3">
         <div className="font-heading font-semibold text-pearl text-4xl md:text-5xl leading-none tracking-[-0.04em]">
-          {MEMBERS_TOTAL}
+          {total}
         </div>
         <div className="text-[10px] tracking-widest uppercase text-pearl-60">
           Ondernemers

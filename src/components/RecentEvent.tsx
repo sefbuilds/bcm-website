@@ -1,12 +1,19 @@
 import Image from "next/image";
 import { Clock, MapPin } from "lucide-react";
+import {
+  getFeaturedRecentEvent,
+  formatEventDay,
+  formatEventTimeRange,
+} from "@/lib/data";
 import Reveal from "./Reveal";
-import { RECENT_EVENT } from "@/lib/constants";
 
-export default function RecentEvent() {
-  const event = RECENT_EVENT;
-  const [lead, ...rest] = event.photos ?? [];
-  if (!lead) return null;
+export default async function RecentEvent() {
+  const event = await getFeaturedRecentEvent();
+  if (!event || event.photos.length === 0) return null;
+
+  const [lead, ...rest] = event.photos;
+  const { day, month, year } = formatEventDay(event.start_at);
+  const timeRange = formatEventTimeRange(event.start_at, event.end_at);
 
   return (
     <section className="bg-ink-2 hairline-t hairline-b">
@@ -16,7 +23,7 @@ export default function RecentEvent() {
             <div className="flex items-center gap-3">
               <span className="h-px w-10 bg-terracotta" />
               <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-terracotta">
-                Terugblik · {event.day} {event.month} {event.year}
+                Terugblik · {day} {month} {year}
               </span>
             </div>
           </Reveal>
@@ -43,26 +50,32 @@ export default function RecentEvent() {
               />
               <div className="absolute inset-0 bg-linear-to-t from-ink/80 via-ink/10 to-transparent" />
               <div className="absolute bottom-0 left-0 right-0 p-8 md:p-10">
-                <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-gold mb-3">
-                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
-                  {event.tag}
-                </div>
+                {event.tag && (
+                  <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-gold mb-3">
+                    <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                    {event.tag}
+                  </div>
+                )}
                 <h3 className="font-heading text-2xl md:text-3xl font-semibold text-pearl leading-tight tracking-[-0.02em]">
                   {event.title}
                 </h3>
                 <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-pearl/80">
-                  <span className="inline-flex items-center gap-1.5">
-                    <MapPin size={14} aria-hidden="true" />
-                    {event.location}
-                  </span>
+                  {event.location && (
+                    <span className="inline-flex items-center gap-1.5">
+                      <MapPin size={14} aria-hidden="true" />
+                      {event.location}
+                    </span>
+                  )}
                   <span className="inline-flex items-center gap-1.5">
                     <Clock size={14} aria-hidden="true" />
-                    {event.time}
+                    {timeRange}
                   </span>
                 </div>
-                <p className="mt-4 text-pearl/85 leading-relaxed max-w-xl">
-                  {event.description}
-                </p>
+                {event.description && (
+                  <p className="mt-4 text-pearl/85 leading-relaxed max-w-xl">
+                    {event.description}
+                  </p>
+                )}
               </div>
             </div>
           </Reveal>

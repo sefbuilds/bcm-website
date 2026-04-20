@@ -86,6 +86,17 @@ export default function Footer() {
         <div className="mt-20 pt-8 hairline-t flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-[11px] tracking-widest uppercase text-pearl-60">
           <p>© {year} {SITE_INFO.fullName}</p>
           <p>Palma · Balearen · 39.57° N · 2.65° E</p>
+          <p>
+            Designed &amp; built by{" "}
+            <a
+              href="https://astrelon.io"
+              target="_blank"
+              rel="noreferrer"
+              className="text-pearl hover:text-gold transition-colors"
+            >
+              Astrelon
+            </a>
+          </p>
         </div>
       </div>
     </footer>

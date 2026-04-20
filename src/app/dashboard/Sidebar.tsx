@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut, LayoutGrid, Users, Handshake, Star, FileText } from "lucide-react";
+import { LogOut, LayoutGrid, Users, Handshake, Star, FileText, Calendar } from "lucide-react";
 import { signOutAction } from "./actions";
 import type { AdminProfile } from "@/lib/auth";
 
@@ -12,6 +12,7 @@ type Props = {
 
 const NAV = [
   { href: "/dashboard", label: "Overview", icon: LayoutGrid },
+  { href: "/dashboard/events", label: "Events", icon: Calendar },
   { href: "/dashboard/leden", label: "Leden", icon: Users },
   { href: "/dashboard/partners", label: "Partners", icon: Handshake },
   { href: "/dashboard/sponsors", label: "Sponsors", icon: Star },

@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { COUNTRY_CODES, MALLORCA_REGIONS } from "@/lib/constants";
 import {
   submitIntake,
   type IntakeRole,
@@ -22,8 +23,10 @@ type Answers = {
   voornaam: string;
   achternaam: string;
   email: string;
+  dial_code: string;
   telefoon: string;
   woonplaats: string;
+  woonplaats_other: string;
   bedrijf: string;
   website: string;
   fase: SingleValue;
@@ -35,7 +38,7 @@ type Answers = {
   q_fundament_schrappen: string;
   q_fundament_opschalen: string;
   // Block 3
-  reden: SingleValue;
+  reden: MultiValue;
   gevoel: MultiValue;
   sectoren: MultiValue;
   q_netwerk_type: string;
@@ -72,8 +75,10 @@ const INITIAL_ANSWERS: Answers = {
   voornaam: "",
   achternaam: "",
   email: "",
+  dial_code: "34",
   telefoon: "",
   woonplaats: "",
+  woonplaats_other: "",
   bedrijf: "",
   website: "",
   fase: null,
@@ -83,7 +88,7 @@ const INITIAL_ANSWERS: Answers = {
   q_fundament_missen: "",
   q_fundament_schrappen: "",
   q_fundament_opschalen: "",
-  reden: null,
+  reden: [],
   gevoel: [],
   sectoren: [],
   q_netwerk_type: "",
@@ -237,20 +242,38 @@ export default function IntakeForm({
       return;
     }
     setSubmitting(true);
-    const { voornaam, achternaam, email, telefoon, woonplaats, bedrijf, website, fase, ...rest } =
-      answers;
+    const {
+      voornaam,
+      achternaam,
+      email,
+      dial_code,
+      telefoon,
+      woonplaats,
+      woonplaats_other,
+      bedrijf,
+      website,
+      fase,
+      ...rest
+    } = answers;
+
+    const combinedPhone = telefoon.trim()
+      ? `+${dial_code} ${telefoon.trim()}`
+      : "";
+    const resolvedWoonplaats =
+      woonplaats === "__other__" ? woonplaats_other.trim() : woonplaats;
+
     const res = await submitIntake({
       role,
       tier,
       voornaam,
       achternaam,
       email,
-      telefoon,
-      woonplaats,
+      telefoon: combinedPhone,
+      woonplaats: resolvedWoonplaats,
       bedrijf,
       website,
       fase: fase ?? undefined,
-      data: rest,
+      data: { ...rest, dial_code },
     });
     setSubmitting(false);
     if (res.ok) {
@@ -481,44 +504,76 @@ function AboutStep({
           />
         </div>
       </div>
-      <div className="grid-2">
-        <div className="field">
-          <label htmlFor="email">E-mail *</label>
-          <input
-            type="email"
-            id="email"
-            value={answers.email}
-            onChange={(e) => update("email", e.target.value)}
-            required
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="telefoon">Telefoon / WhatsApp</label>
+      <div className="field">
+        <label htmlFor="email">E-mail *</label>
+        <input
+          type="email"
+          id="email"
+          value={answers.email}
+          onChange={(e) => update("email", e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="field">
+        <label htmlFor="telefoon">Telefoon / WhatsApp</label>
+        <div style={{ display: "flex", gap: 8 }}>
+          <select
+            aria-label="Landcode"
+            value={answers.dial_code}
+            onChange={(e) => update("dial_code", e.target.value)}
+            style={{ width: 130, flexShrink: 0 }}
+          >
+            {COUNTRY_CODES.map((c) => (
+              <option key={c.iso} value={c.code}>
+                {c.flag} +{c.code}
+              </option>
+            ))}
+          </select>
           <input
             type="tel"
             id="telefoon"
-            placeholder="+34 600 ..."
+            placeholder="6 12 34 56 78"
             value={answers.telefoon}
             onChange={(e) => update("telefoon", e.target.value)}
           />
         </div>
       </div>
+
       <div className="field">
         <label htmlFor="woonplaats">Waar op Mallorca woon/werk je?</label>
-        <input
-          type="text"
+        <select
           id="woonplaats"
-          placeholder="Palma / Sóller / Alcúdia / ..."
           value={answers.woonplaats}
           onChange={(e) => update("woonplaats", e.target.value)}
-        />
+        >
+          <option value="">Kies een regio...</option>
+          {MALLORCA_REGIONS.map((r) => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
+          <option value="__other__">Anders / elders...</option>
+        </select>
       </div>
+      {answers.woonplaats === "__other__" && (
+        <div className="field">
+          <label htmlFor="woonplaats_other">Vul je regio in</label>
+          <input
+            type="text"
+            id="woonplaats_other"
+            value={answers.woonplaats_other}
+            onChange={(e) => update("woonplaats_other", e.target.value)}
+          />
+        </div>
+      )}
+
       <div className="field">
-        <label htmlFor="bedrijf">Bedrijf of activiteit</label>
+        <label htmlFor="bedrijf">Bedrijfsnaam</label>
         <input
           type="text"
           id="bedrijf"
-          placeholder="Naam, branche, of korte omschrijving"
+          placeholder="Naam van je bedrijf"
           value={answers.bedrijf}
           onChange={(e) => update("bedrijf", e.target.value)}
         />
@@ -664,12 +719,12 @@ function SeekingStep({
 
       <div className="q">
         <label className="q-label">
-          Wat is de belangrijkste reden om bij NBCM te horen?
+          Wat zijn de belangrijkste redenen om bij NBCM te horen?
         </label>
-        <RadioGroup
-          name="reden"
+        <span className="q-hint">Kies maximaal 2</span>
+        <CheckboxGroup
           value={answers.reden}
-          onChange={(v) => update("reden", v)}
+          onToggle={(v) => toggleMulti("reden", v, 2)}
           options={[
             { value: "netwerk", label: "Netwerk uitbreiden met relevante mensen" },
             { value: "business", label: "Directe business of deals genereren" },

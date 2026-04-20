@@ -1,10 +1,36 @@
 import Link from "next/link";
 import { ArrowUpRight, MapPin, Clock, Calendar } from "lucide-react";
-import { NEXT_EVENT } from "@/lib/constants";
+import { getNextEvent, formatEventDay, formatEventTimeRange } from "@/lib/data";
 import Reveal from "./Reveal";
 
-export default function NextEvent() {
-  const event = NEXT_EVENT;
+export default async function NextEvent() {
+  const event = await getNextEvent();
+  if (!event) {
+    return (
+      <section className="bg-ink">
+        <div className="container-site py-24 md:py-32">
+          <div className="max-w-2xl">
+            <Reveal>
+              <div className="flex items-center gap-3">
+                <span className="h-px w-10 bg-terracotta" />
+                <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-terracotta">
+                  Agenda
+                </span>
+              </div>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <h2 className="mt-8 font-heading text-4xl md:text-5xl lg:text-6xl font-semibold text-pearl tracking-[-0.03em] leading-[1.05] text-balance">
+                Volgende bijeenkomst volgt binnenkort.
+              </h2>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const { day, month, year, weekday } = formatEventDay(event.start_at);
+  const timeRange = formatEventTimeRange(event.start_at, event.end_at);
 
   return (
     <section className="bg-ink relative">
@@ -54,18 +80,18 @@ export default function NextEvent() {
                 <div>
                   <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
                     <Calendar size={12} aria-hidden="true" />
-                    Zaterdag
+                    {weekday}
                   </div>
                   <div className="mt-8 font-heading font-semibold text-pearl text-8xl md:text-9xl leading-[0.85] tracking-[-0.05em]">
-                    {event.day}
+                    {day}
                   </div>
                   <div className="mt-4 text-sm tracking-[0.2em] uppercase text-pearl-80">
-                    {event.month} {event.year}
+                    {month} {year}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-pearl-60">
                   <Clock size={14} aria-hidden="true" />
-                  {event.time}
+                  {timeRange}
                 </div>
               </div>
 
@@ -79,17 +105,21 @@ export default function NextEvent() {
                   <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-pearl tracking-[-0.03em] leading-[1.05] text-balance">
                     {event.title}
                   </h3>
-                  <p className="mt-5 inline-flex items-center gap-1.5 text-pearl-60">
-                    <MapPin size={15} aria-hidden="true" />
-                    {event.location}
-                  </p>
-                  <p className="mt-6 text-pearl-80 leading-relaxed text-lg max-w-xl">
-                    {event.description}
-                  </p>
+                  {event.location && (
+                    <p className="mt-5 inline-flex items-center gap-1.5 text-pearl-60">
+                      <MapPin size={15} aria-hidden="true" />
+                      {event.location}
+                    </p>
+                  )}
+                  {event.description && (
+                    <p className="mt-6 text-pearl-80 leading-relaxed text-lg max-w-xl">
+                      {event.description}
+                    </p>
+                  )}
                 </div>
                 <div className="mt-10">
                   <Link
-                    href="/contact"
+                    href={`/events/aanmelden?event=${event.slug}`}
                     className="group/cta inline-flex items-center gap-2 rounded-full bg-terracotta px-8 py-4 text-white font-medium transition-all hover:bg-terracotta-light hover:scale-[1.02]"
                   >
                     Meld je aan

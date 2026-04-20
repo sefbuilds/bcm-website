@@ -12,6 +12,8 @@ import Bestuur from "@/components/Bestuur";
 import CTABanner from "@/components/CTABanner";
 import { SITE_INFO, STOCK_IMAGES } from "@/lib/constants";
 
+export const revalidate = 60;
+
 export default function Home() {
   return (
     <>
@@ -19,7 +21,7 @@ export default function Home() {
         title={SITE_INFO.tagline}
         subtitle={SITE_INFO.subtagline}
         ctaText="Sluit je aan"
-        ctaHref="/lid-worden"
+        ctaHref="/intake?tier=member"
         italicWord="samen sterker."
         showBento
       />

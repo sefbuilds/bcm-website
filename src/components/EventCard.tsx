@@ -1,13 +1,15 @@
 import { MapPin, Clock } from "lucide-react";
-import type { Event } from "@/lib/constants";
+import { formatEventDay, formatEventTimeRange, type DBEvent } from "@/lib/data";
 
 type Props = {
-  event: Event;
+  event: DBEvent;
   variant?: "default" | "featured";
 };
 
 export default function EventCard({ event, variant = "default" }: Props) {
   const isFeatured = variant === "featured";
+  const { day, month, year } = formatEventDay(event.start_at);
+  const timeRange = formatEventTimeRange(event.start_at, event.end_at);
 
   return (
     <article
@@ -27,14 +29,12 @@ export default function EventCard({ event, variant = "default" }: Props) {
           />
           <div className="relative">
             <div className="font-heading font-bold text-4xl leading-none tracking-tight">
-              {event.day}
+              {day}
             </div>
             <div className="text-[10px] tracking-widest mt-2 text-gold">
-              {event.month}
+              {month}
             </div>
-            <div className="text-[10px] text-white/50 mt-1">
-              {event.year}
-            </div>
+            <div className="text-[10px] text-white/50 mt-1">{year}</div>
           </div>
         </div>
 
@@ -52,18 +52,22 @@ export default function EventCard({ event, variant = "default" }: Props) {
             {event.title}
           </h3>
           <div className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-deep-blue-60">
-            <span className="inline-flex items-center gap-1.5">
-              <MapPin size={14} aria-hidden="true" />
-              {event.location}
-            </span>
+            {event.location && (
+              <span className="inline-flex items-center gap-1.5">
+                <MapPin size={14} aria-hidden="true" />
+                {event.location}
+              </span>
+            )}
             <span className="inline-flex items-center gap-1.5">
               <Clock size={14} aria-hidden="true" />
-              {event.time}
+              {timeRange}
             </span>
           </div>
-          <p className="mt-4 text-deep-blue-80 leading-relaxed text-sm md:text-base">
-            {event.description}
-          </p>
+          {event.description && (
+            <p className="mt-4 text-deep-blue-80 leading-relaxed text-sm md:text-base">
+              {event.description}
+            </p>
+          )}
         </div>
       </div>
     </article>

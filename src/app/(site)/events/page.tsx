@@ -5,7 +5,7 @@ import RecentEvent from "@/components/RecentEvent";
 import EventCard from "@/components/EventCard";
 import CTABanner from "@/components/CTABanner";
 import Reveal from "@/components/Reveal";
-import { PAST_EVENTS } from "@/lib/constants";
+import { getPastEvents, getFeaturedRecentEvent } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Events & Bijeenkomsten",
@@ -13,7 +13,15 @@ export const metadata: Metadata = {
     "Een overzicht van de bijeenkomsten, borrels en diners van de Nederlandstalige Business Club Mallorca — inclusief het volgende event.",
 };
 
-export default function EventsPage() {
+export const revalidate = 60;
+
+export default async function EventsPage() {
+  const [pastEvents, featuredRecent] = await Promise.all([
+    getPastEvents(),
+    getFeaturedRecentEvent(),
+  ]);
+  const archive = pastEvents.filter((e) => e.id !== featuredRecent?.id);
+
   return (
     <>
       <Hero
@@ -52,13 +60,19 @@ export default function EventsPage() {
               </p>
             </Reveal>
           </div>
-          <div className="mt-14 grid gap-3 md:grid-cols-2">
-            {PAST_EVENTS.map((event, i) => (
-              <Reveal key={event.id} delay={i * 0.06}>
-                <EventCard event={event} />
-              </Reveal>
-            ))}
-          </div>
+          {archive.length === 0 ? (
+            <div className="mt-14 rounded-2xl glass p-12 text-center text-pearl-60">
+              Archief vult zich naarmate we meer bijeenkomsten organiseren.
+            </div>
+          ) : (
+            <div className="mt-14 grid gap-3 md:grid-cols-2">
+              {archive.map((event, i) => (
+                <Reveal key={event.id} delay={i * 0.06}>
+                  <EventCard event={event} />
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
