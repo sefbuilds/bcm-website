@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SponsorBanner from "@/components/SponsorBanner";
 import { SITE_INFO } from "@/lib/constants";
 import "./globals.css";
 
@@ -47,6 +48,7 @@ export default function RootLayout({
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
+        <SponsorBanner />
       </body>
     </html>
   );

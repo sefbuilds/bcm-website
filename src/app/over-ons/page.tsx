@@ -4,7 +4,7 @@ import IntroSection from "@/components/IntroSection";
 import Bestuur from "@/components/Bestuur";
 import CTABanner from "@/components/CTABanner";
 import Reveal from "@/components/Reveal";
-import { AMBASSADOR, STOCK_IMAGES } from "@/lib/constants";
+import { STOCK_IMAGES } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Over ons",
@@ -86,35 +86,7 @@ export default function OverOns() {
         </div>
       </section>
 
-      <Bestuur showAmbassador={false} />
-
-      <section className="bg-ink-2 hairline-t">
-        <div className="container-site py-24 md:py-28">
-          <div className="max-w-3xl mx-auto text-center">
-            <Reveal>
-              <div className="flex items-center gap-3 justify-center">
-                <span className="h-px w-10 bg-gold" />
-                <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-gold">
-                  Ambassadeur
-                </span>
-                <span className="h-px w-10 bg-gold" />
-              </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <h2 className="mt-8 font-heading text-4xl md:text-5xl lg:text-6xl font-semibold text-pearl tracking-[-0.03em] leading-[1.05]">
-                {AMBASSADOR.name}
-              </h2>
-            </Reveal>
-            <Reveal delay={0.18}>
-              <p className="mt-8 text-pearl-80 leading-relaxed text-lg">
-                Als ambassadeur van NBCM vertegenwoordigt Roel de club bij
-                lokale en internationale gelegenheden en draagt hij bij
-                aan de warme, professionele uitstraling van ons netwerk.
-              </p>
-            </Reveal>
-          </div>
-        </div>
-      </section>
+      <Bestuur />
 
       <CTABanner
         title="Ook onderdeel worden van NBCM?"

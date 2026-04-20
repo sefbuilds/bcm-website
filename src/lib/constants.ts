@@ -70,29 +70,48 @@ export type BoardMember = {
 
 export const BOARD_MEMBERS: BoardMember[] = [
   {
-    name: "Vincent Werner",
+    name: "Sybrand Sijbertsma",
     role: "Voorzitter",
-    bio: "Verbindt leden, stippelt de koers uit en zorgt dat de club een warme thuisbasis blijft voor Nederlandstalige ondernemers.",
+    bio: "Geeft leiding aan het bestuur en bewaakt de koers van de club. Uitgebreid profiel volgt na intake.",
+    initials: "SS",
+  },
+  {
+    name: "Vincent Werner",
+    role: "Bestuurslid · voormalig voorzitter",
+    bio: "Bouwde de club mee op vanuit de beginjaren en blijft betrokken als bestuurslid. Uitgebreid profiel volgt na intake.",
     initials: "VW",
   },
   {
     name: "Jan Mulder",
-    role: "Bestuurslid",
-    bio: "Organiseert events en partnerships, en brengt ondernemers bij elkaar rond gedeelde ambities en interesses.",
+    role: "Bestuurslid · mede-oprichter",
+    bio: "Mede-oprichter van NBCM en al jaren een verbindende factor in de Nederlandstalige gemeenschap op Mallorca. Uitgebreid profiel volgt na intake.",
     initials: "JM",
   },
   {
     name: "Ingrid van de Reijt",
-    role: "Bestuurslid & Honorair Consul",
-    bio: "Vanuit haar dubbele rol bouwt ze bruggen tussen de Nederlandstalige gemeenschap en lokale instituties op Mallorca.",
+    role: "Honorair Consul",
+    bio: "Bouwt bruggen tussen de Nederlandstalige gemeenschap en lokale instituties op Mallorca. Uitgebreid profiel volgt na intake.",
     initials: "IR",
   },
+  {
+    name: "Clarice",
+    role: "Bestuurslid",
+    bio: "Achternaam en uitgebreid profiel volgen na intake.",
+    initials: "C",
+  },
+  {
+    name: "Maurits Stock",
+    role: "Bestuurslid",
+    bio: "Uitgebreid profiel volgt na intake.",
+    initials: "MS",
+  },
+  {
+    name: "Stefan Beekwilder",
+    role: "Bestuurslid",
+    bio: "Bestuurslid en verbonden aan Clarosea (hoofdsponsor). Uitgebreid profiel volgt na intake.",
+    initials: "SB",
+  },
 ];
-
-export const AMBASSADOR = {
-  name: "Roel Nieuwenkamp",
-  label: "Ambassadeur",
-};
 
 export type Event = {
   id: string;
@@ -243,6 +262,68 @@ export const VALUE_PROPS: ValueProp[] = [
     description:
       "Deel kennis en ervaring tijdens borrels, diners en masterclasses, en groei zakelijk én persoonlijk.",
     icon: "trending",
+  },
+];
+
+export type MembershipTier = {
+  id: "member" | "partner" | "sponsor";
+  eyebrow: string;
+  title: string;
+  description: string;
+  benefits: string[];
+  ctaText: string;
+  ctaHref: string;
+  accent: "terracotta" | "gold" | "navy";
+};
+
+export const MEMBERSHIP_TIERS: MembershipTier[] = [
+  {
+    id: "member",
+    eyebrow: "Member",
+    title: "Individueel lidmaatschap",
+    description:
+      "Voor Nederlandstalige ondernemers die willen netwerken, verbinden en leren van andere leden.",
+    benefits: [
+      "Toegang tot maandelijkse events",
+      "Opname in de ledenlijst",
+      "Persoonlijke introducties binnen het netwerk",
+      "Toegang tot de online community",
+    ],
+    ctaText: "Word Member",
+    ctaHref: "/lid-worden",
+    accent: "terracotta",
+  },
+  {
+    id: "partner",
+    eyebrow: "Partner",
+    title: "Zakelijke samenwerking",
+    description:
+      "Voor bedrijven die hun netwerk actief willen uitbreiden en zichtbaarheid willen binnen de club.",
+    benefits: [
+      "Alle voordelen van Member",
+      "Logo-zichtbaarheid op de website",
+      "Zichtbaarheid tijdens events",
+      "Mogelijkheid tot co-hosting",
+    ],
+    ctaText: "Word Partner",
+    ctaHref: "/sponsors",
+    accent: "gold",
+  },
+  {
+    id: "sponsor",
+    eyebrow: "Sponsor",
+    title: "Hoofdsponsor van de club",
+    description:
+      "Voor organisaties die zich strategisch willen positioneren als hoofdpartner van NBCM op Mallorca.",
+    benefits: [
+      "Alle voordelen van Partner",
+      "Prominente vermelding en profielpagina",
+      "Spreekmogelijkheden tijdens events",
+      "Strategische positionering",
+    ],
+    ctaText: "Word Sponsor",
+    ctaHref: "/sponsors",
+    accent: "navy",
   },
 ];
 

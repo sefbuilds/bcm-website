@@ -1,12 +1,13 @@
 import BestuurCard from "./BestuurCard";
 import Reveal from "./Reveal";
-import { BOARD_MEMBERS, AMBASSADOR } from "@/lib/constants";
+import { BOARD_MEMBERS } from "@/lib/constants";
 
 type Props = {
   showAmbassador?: boolean;
+  showIntakeNote?: boolean;
 };
 
-export default function Bestuur({ showAmbassador = true }: Props) {
+export default function Bestuur({ showIntakeNote = true }: Props) {
   return (
     <section className="bg-ink">
       <div className="container-site py-24 md:py-32">
@@ -30,35 +31,20 @@ export default function Bestuur({ showAmbassador = true }: Props) {
           </Reveal>
         </div>
 
-        <div className="mt-16 grid gap-10 md:gap-8 md:grid-cols-3">
+        <div className="mt-16 grid gap-8 md:gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {BOARD_MEMBERS.map((member, i) => (
-            <Reveal key={member.name} delay={i * 0.08}>
+            <Reveal key={member.name} delay={i * 0.05}>
               <BestuurCard member={member} />
             </Reveal>
           ))}
         </div>
 
-        {showAmbassador && (
-          <Reveal delay={0.3}>
-            <div className="mt-20 pt-10 hairline-t flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="flex items-center gap-5">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full glass text-pearl font-heading text-sm font-semibold">
-                  RN
-                </div>
-                <div>
-                  <div className="text-[10px] font-medium tracking-[0.24em] uppercase text-terracotta">
-                    Ambassadeur
-                  </div>
-                  <div className="mt-1 font-heading text-lg font-semibold text-pearl">
-                    {AMBASSADOR.name}
-                  </div>
-                </div>
-              </div>
-              <p className="text-sm text-pearl-60 max-w-md md:text-right">
-                Vertegenwoordigt NBCM bij lokale en internationale
-                gelegenheden.
-              </p>
-            </div>
+        {showIntakeNote && (
+          <Reveal delay={0.4}>
+            <p className="mt-12 pt-8 hairline-t text-sm text-pearl-60 max-w-2xl">
+              Uitgebreide profielen, foto&apos;s en achtergronden van de
+              bestuursleden worden aangevuld na de lopende intake-ronde.
+            </p>
           </Reveal>
         )}
       </div>
