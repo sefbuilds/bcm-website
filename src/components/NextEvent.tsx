@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, MapPin, Clock, Calendar } from "lucide-react";
 import { getNextEvent, formatEventDay, formatEventTimeRange } from "@/lib/data";
 import Reveal from "./Reveal";
@@ -31,6 +32,7 @@ export default async function NextEvent() {
 
   const { day, month, year, weekday } = formatEventDay(event.start_at);
   const timeRange = formatEventTimeRange(event.start_at, event.end_at);
+  const hasHero = Boolean(event.hero_image);
 
   return (
     <section className="bg-ink relative">
@@ -71,12 +73,46 @@ export default async function NextEvent() {
         </div>
 
         <Reveal delay={0.15}>
-          <article className="relative rounded-3xl glass-strong overflow-hidden">
-            <div className="absolute -top-1/2 -right-1/4 h-[120%] w-[60%] rounded-full bg-terracotta/15 blur-[120px] pointer-events-none" />
-            <div className="noise" />
+          <article className="relative rounded-3xl overflow-hidden min-h-[520px] md:min-h-[560px]">
+            {hasHero ? (
+              <>
+                <Image
+                  src={event.hero_image!}
+                  alt={event.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 100vw, 1200px"
+                  priority
+                />
+                <div
+                  className="absolute inset-0 bg-linear-to-r from-ink/95 via-ink/75 to-ink/20"
+                  aria-hidden="true"
+                />
+                <div
+                  className="absolute inset-0 bg-linear-to-t from-ink/80 via-transparent to-transparent"
+                  aria-hidden="true"
+                />
+                <div className="noise" />
+              </>
+            ) : (
+              <>
+                <div className="absolute inset-0 glass-strong" aria-hidden="true" />
+                <div
+                  className="absolute -top-1/2 -right-1/4 h-[120%] w-[60%] rounded-full bg-terracotta/15 blur-[120px] pointer-events-none"
+                  aria-hidden="true"
+                />
+                <div className="noise" />
+              </>
+            )}
 
             <div className="relative grid md:grid-cols-[auto_1fr]">
-              <div className="hairline-b md:hairline-b-0 md:border-r md:border-r-hairline p-10 md:p-14 md:w-96 flex flex-col justify-between gap-10">
+              <div
+                className={`p-10 md:p-14 md:w-96 flex flex-col justify-between gap-10 ${
+                  hasHero
+                    ? ""
+                    : "hairline-b md:hairline-b-0 md:border-r md:border-r-hairline"
+                }`}
+              >
                 <div>
                   <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
                     <Calendar size={12} aria-hidden="true" />
@@ -112,7 +148,11 @@ export default async function NextEvent() {
                     </p>
                   )}
                   {event.description && (
-                    <p className="mt-6 text-pearl-80 leading-relaxed text-lg max-w-xl">
+                    <p
+                      className={`mt-6 leading-relaxed text-lg max-w-xl ${
+                        hasHero ? "text-pearl/90" : "text-pearl-80"
+                      }`}
+                    >
                       {event.description}
                     </p>
                   )}
