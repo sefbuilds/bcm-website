@@ -26,8 +26,8 @@ const ACCENT_STYLES = {
   navy: {
     eyebrow: "text-navy-light",
     divider: "bg-navy-2",
-    iconWrap: "bg-navy/40 text-pearl border border-navy-light/30",
-    cta: "bg-navy hover:bg-navy-2 text-pearl border border-navy-light/30",
+    iconWrap: "bg-navy/40 text-white border border-navy-light/30",
+    cta: "bg-navy hover:bg-navy-2 text-white border border-navy-light/30",
   },
 } as const;
 

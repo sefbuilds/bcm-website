@@ -85,7 +85,9 @@ export default function Navbar() {
         </ul>
 
         <Link
-          href="/lid-worden"
+          href="/intake?tier=member"
+          target="_blank"
+          rel="noopener noreferrer"
           className="group hidden lg:inline-flex items-center gap-1.5 rounded-full bg-terracotta px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-terracotta-light hover:scale-[1.02]"
         >
           Lid worden
@@ -130,7 +132,9 @@ export default function Navbar() {
             ))}
             <li className="pt-6">
               <Link
-                href="/lid-worden"
+                href="/intake?tier=member"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full bg-terracotta px-6 py-3 text-white font-medium"
               >
                 Lid worden
