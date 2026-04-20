@@ -290,7 +290,7 @@ export const MEMBERSHIP_TIERS: MembershipTier[] = [
       "Toegang tot de online community",
     ],
     ctaText: "Word Member",
-    ctaHref: "/lid-worden",
+    ctaHref: "/intake?tier=member",
     accent: "terracotta",
   },
   {
@@ -306,7 +306,7 @@ export const MEMBERSHIP_TIERS: MembershipTier[] = [
       "Mogelijkheid tot co-hosting",
     ],
     ctaText: "Word Partner",
-    ctaHref: "/sponsors",
+    ctaHref: "/intake?tier=partner",
     accent: "gold",
   },
   {
@@ -322,7 +322,7 @@ export const MEMBERSHIP_TIERS: MembershipTier[] = [
       "Strategische positionering",
     ],
     ctaText: "Word Sponsor",
-    ctaHref: "/sponsors",
+    ctaHref: "/intake?tier=sponsor",
     accent: "navy",
   },
 ];

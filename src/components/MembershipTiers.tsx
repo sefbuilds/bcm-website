@@ -141,6 +141,8 @@ function TierCard({ tier }: { tier: MembershipTier }) {
       <div className="relative mt-8">
         <Link
           href={tier.ctaHref}
+          target="_blank"
+          rel="noopener noreferrer"
           className={`group/cta inline-flex items-center gap-2 rounded-full px-6 py-3 font-medium transition-all hover:scale-[1.02] ${styles.cta}`}
         >
           {tier.ctaText}
