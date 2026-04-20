@@ -6,6 +6,7 @@ import ValueProps from "@/components/ValueProps";
 import NextEvent from "@/components/NextEvent";
 import Members from "@/components/Members";
 import Testimonial from "@/components/Testimonial";
+import MembershipTiers from "@/components/MembershipTiers";
 import Sponsors from "@/components/Sponsors";
 import Bestuur from "@/components/Bestuur";
 import CTABanner from "@/components/CTABanner";
@@ -48,6 +49,8 @@ export default function Home() {
       <Members />
 
       <Testimonial />
+
+      <MembershipTiers />
 
       <Sponsors />
 
