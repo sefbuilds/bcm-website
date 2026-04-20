@@ -85,11 +85,11 @@ export default async function NextEvent() {
                   priority
                 />
                 <div
-                  className="absolute inset-0 bg-linear-to-r from-ink/95 via-ink/75 to-ink/20"
+                  className="absolute inset-0 bg-linear-to-r from-navy/95 via-navy/80 to-navy/30"
                   aria-hidden="true"
                 />
                 <div
-                  className="absolute inset-0 bg-linear-to-t from-ink/80 via-transparent to-transparent"
+                  className="absolute inset-0 bg-linear-to-t from-navy/85 via-transparent to-transparent"
                   aria-hidden="true"
                 />
                 <div className="noise" />
