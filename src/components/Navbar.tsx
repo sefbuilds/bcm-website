@@ -3,11 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X, ArrowUpRight } from "lucide-react";
+import { Menu, X, ArrowUpRight, LogIn, LayoutGrid } from "lucide-react";
 import { NAV_ITEMS, SITE_INFO } from "@/lib/constants";
 import LiveTime from "./LiveTime";
 
-export default function Navbar() {
+type NavbarProps = {
+  isAdmin?: boolean;
+};
+
+export default function Navbar({ isAdmin = false }: NavbarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -84,19 +88,38 @@ export default function Navbar() {
           })}
         </ul>
 
-        <Link
-          href="/intake?tier=member"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group hidden lg:inline-flex items-center gap-1.5 rounded-full bg-terracotta px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-terracotta-light hover:scale-[1.02]"
-        >
-          Lid worden
-          <ArrowUpRight
-            size={14}
-            className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-            aria-hidden="true"
-          />
-        </Link>
+        <div className="hidden lg:flex items-center gap-2">
+          {isAdmin ? (
+            <Link
+              href="/dashboard"
+              className="group inline-flex items-center gap-1.5 rounded-full border border-hairline px-4 py-2 text-sm text-pearl-80 hover:text-pearl hover:border-pearl/30 transition-colors"
+            >
+              <LayoutGrid size={13} aria-hidden="true" />
+              Dashboard
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              className="group inline-flex items-center gap-1.5 rounded-full border border-hairline px-4 py-2 text-sm text-pearl-80 hover:text-pearl hover:border-pearl/30 transition-colors"
+            >
+              <LogIn size={13} aria-hidden="true" />
+              Log in
+            </Link>
+          )}
+          <Link
+            href="/intake?tier=member"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-1.5 rounded-full bg-terracotta px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-terracotta-light hover:scale-[1.02]"
+          >
+            Lid worden
+            <ArrowUpRight
+              size={14}
+              className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              aria-hidden="true"
+            />
+          </Link>
+        </div>
 
         <button
           type="button"
@@ -130,7 +153,7 @@ export default function Navbar() {
                 </Link>
               </li>
             ))}
-            <li className="pt-6">
+            <li className="pt-6 flex flex-col gap-3">
               <Link
                 href="/intake?tier=member"
                 target="_blank"
@@ -140,6 +163,23 @@ export default function Navbar() {
                 Lid worden
                 <ArrowUpRight size={16} aria-hidden="true" />
               </Link>
+              {isAdmin ? (
+                <Link
+                  href="/dashboard"
+                  className="inline-flex items-center gap-2 rounded-full border border-hairline px-6 py-3 text-pearl font-medium"
+                >
+                  <LayoutGrid size={14} aria-hidden="true" />
+                  Dashboard
+                </Link>
+              ) : (
+                <Link
+                  href="/login"
+                  className="inline-flex items-center gap-2 rounded-full border border-hairline px-6 py-3 text-pearl font-medium"
+                >
+                  <LogIn size={14} aria-hidden="true" />
+                  Log in
+                </Link>
+              )}
             </li>
           </ul>
         </div>
