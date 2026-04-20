@@ -16,6 +16,21 @@ export type AdminProfile = {
  * Use from server components or layouts.
  */
 export async function requireAdmin(): Promise<AdminProfile> {
+  // Temporary bypass — set DASHBOARD_AUTH_DISABLED=true in Vercel env
+  // to open /dashboard without login. Remove before exposing real data.
+  if (process.env.DASHBOARD_AUTH_DISABLED === "true") {
+    console.warn(
+      "[requireAdmin] DASHBOARD_AUTH_DISABLED=true — dashboard is OPEN to the public. Turn this off in production.",
+    );
+    return {
+      id: "bypass",
+      user_id: "bypass",
+      name: "Preview mode",
+      role: "dev",
+      email: "preview@nbcm.local",
+    };
+  }
+
   const supabase = await createSupabaseServer();
   const {
     data: { user },
