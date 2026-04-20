@@ -269,7 +269,7 @@ function BentoNextEvent({
             priority
           />
           <div
-            className="absolute inset-0 bg-linear-to-t from-ink/95 via-ink/60 to-ink/30"
+            className="absolute inset-0 bg-linear-to-t from-navy/95 via-navy/75 to-navy/45"
             aria-hidden="true"
           />
         </>
