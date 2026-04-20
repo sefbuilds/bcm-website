@@ -1,10 +1,13 @@
 import Link from "next/link";
-import { ArrowUpRight, Users, Handshake, Star, FileText } from "lucide-react";
+import { ArrowUpRight, Users, Handshake, Star, FileText, Calendar } from "lucide-react";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import PageHeader from "./PageHeader";
 
 async function getCounts() {
   const supabase = getSupabaseAdmin();
+  const weekAgo = new Date(Date.now() - 7 * 86400 * 1000).toISOString();
+  const now = new Date().toISOString();
+
   const queries = await Promise.all([
     supabase.from("nbcm_members").select("id", { count: "exact", head: true }),
     supabase.from("nbcm_partners").select("id", { count: "exact", head: true }),
@@ -13,10 +16,15 @@ async function getCounts() {
     supabase
       .from("nbcm_intakes")
       .select("id", { count: "exact", head: true })
-      .gte(
-        "created_at",
-        new Date(Date.now() - 7 * 86400 * 1000).toISOString(),
-      ),
+      .gte("created_at", weekAgo),
+    supabase
+      .from("nbcm_events")
+      .select("id", { count: "exact", head: true })
+      .gte("start_at", now),
+    supabase
+      .from("nbcm_event_registrations")
+      .select("id", { count: "exact", head: true })
+      .gte("created_at", weekAgo),
   ]);
 
   return {
@@ -25,6 +33,8 @@ async function getCounts() {
     sponsors: queries[2].count ?? 0,
     intakes: queries[3].count ?? 0,
     intakesWeek: queries[4].count ?? 0,
+    upcomingEvents: queries[5].count ?? 0,
+    eventRegsWeek: queries[6].count ?? 0,
   };
 }
 
@@ -41,12 +51,25 @@ export default async function DashboardOverviewPage() {
 
   const tiles: Tile[] = [
     { label: "Leden", value: counts.members, href: "/dashboard/leden", icon: Users },
+    {
+      label: "Komende events",
+      value: counts.upcomingEvents,
+      sub:
+        counts.eventRegsWeek > 0
+          ? `+${counts.eventRegsWeek} aanmeldingen deze week`
+          : undefined,
+      href: "/dashboard/events",
+      icon: Calendar,
+    },
     { label: "Partners", value: counts.partners, href: "/dashboard/partners", icon: Handshake },
     { label: "Sponsors", value: counts.sponsors, href: "/dashboard/sponsors", icon: Star },
     {
       label: "Intakes",
       value: counts.intakes,
-      sub: `+${counts.intakesWeek} deze week`,
+      sub:
+        counts.intakesWeek > 0
+          ? `+${counts.intakesWeek} deze week`
+          : undefined,
       href: "/dashboard/intakes",
       icon: FileText,
     },
@@ -60,7 +83,7 @@ export default async function DashboardOverviewPage() {
         description="Korte status van leden, partners, sponsors en binnengekomen intakes."
       />
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {tiles.map((tile) => {
           const Icon = tile.icon;
           return (

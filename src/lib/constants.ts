@@ -4,11 +4,72 @@ export type NavItem = {
 };
 
 export const NAV_ITEMS: NavItem[] = [
+  { label: "Home", href: "/" },
   { label: "Over ons", href: "/over-ons" },
   { label: "Events", href: "/events" },
   { label: "Leden", href: "/leden" },
   { label: "Sponsors", href: "/sponsors" },
   { label: "Contact", href: "/contact" },
+];
+
+export const MALLORCA_REGIONS = [
+  "Palma",
+  "Palma Centro",
+  "Bendinat",
+  "Portals Nous",
+  "Puerto Portals",
+  "Santa Ponsa",
+  "Port d'Andratx",
+  "Andratx",
+  "Port Adriano",
+  "Magaluf",
+  "Illetes",
+  "Sóller",
+  "Port de Sóller",
+  "Deià",
+  "Valldemossa",
+  "Pollença",
+  "Port de Pollença",
+  "Alcúdia",
+  "Santanyí",
+  "Cala d'Or",
+  "Artà",
+  "Capdepera",
+  "Cala Ratjada",
+  "Colònia de Sant Jordi",
+  "Binissalem",
+  "Santa Maria del Camí",
+  "Manacor",
+  "Felanitx",
+  "Esporles",
+] as const;
+
+export type CountryCode = {
+  code: string; // dial code without +
+  iso: string; // ISO 3166-1 alpha-2
+  label: string;
+  flag: string;
+};
+
+export const COUNTRY_CODES: CountryCode[] = [
+  { iso: "ES", code: "34", label: "Spanje", flag: "🇪🇸" },
+  { iso: "NL", code: "31", label: "Nederland", flag: "🇳🇱" },
+  { iso: "BE", code: "32", label: "België", flag: "🇧🇪" },
+  { iso: "DE", code: "49", label: "Duitsland", flag: "🇩🇪" },
+  { iso: "FR", code: "33", label: "Frankrijk", flag: "🇫🇷" },
+  { iso: "GB", code: "44", label: "Verenigd Koninkrijk", flag: "🇬🇧" },
+  { iso: "IE", code: "353", label: "Ierland", flag: "🇮🇪" },
+  { iso: "IT", code: "39", label: "Italië", flag: "🇮🇹" },
+  { iso: "PT", code: "351", label: "Portugal", flag: "🇵🇹" },
+  { iso: "CH", code: "41", label: "Zwitserland", flag: "🇨🇭" },
+  { iso: "AT", code: "43", label: "Oostenrijk", flag: "🇦🇹" },
+  { iso: "LU", code: "352", label: "Luxemburg", flag: "🇱🇺" },
+  { iso: "DK", code: "45", label: "Denemarken", flag: "🇩🇰" },
+  { iso: "SE", code: "46", label: "Zweden", flag: "🇸🇪" },
+  { iso: "NO", code: "47", label: "Noorwegen", flag: "🇳🇴" },
+  { iso: "US", code: "1", label: "Verenigde Staten", flag: "🇺🇸" },
+  { iso: "ZA", code: "27", label: "Zuid-Afrika", flag: "🇿🇦" },
+  { iso: "AE", code: "971", label: "Verenigde Arabische Emiraten", flag: "🇦🇪" },
 ];
 
 export const SITE_INFO = {
