@@ -249,61 +249,83 @@ function BentoNextEvent({
   event: DBEvent | null;
 }) {
   const parts = event ? formatEventDay(event.start_at) : null;
+  const hasHero = Boolean(event?.hero_image);
 
   return (
     <Link
       href={event ? `/events/aanmelden?event=${event.slug}` : "/events"}
-      className={`group glass rounded-2xl p-7 md:p-8 flex flex-col justify-between min-h-[200px] transition-all hover:bg-pearl/[0.07] ${className}`}
+      className={`group relative rounded-2xl overflow-hidden flex flex-col justify-between min-h-[200px] transition-all ${
+        hasHero ? "" : "glass hover:bg-pearl/[0.07]"
+      } ${className}`}
     >
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
-          <Calendar size={12} aria-hidden="true" />
-          Volgende bijeenkomst
-        </div>
-        <ArrowUpRight
-          size={16}
-          className="text-pearl-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-pearl"
-          aria-hidden="true"
-        />
-      </div>
-
-      {event && parts ? (
+      {hasHero && event?.hero_image && (
         <>
-          <div className="mt-6 flex items-baseline gap-4">
-            <span className="font-heading font-semibold text-pearl text-6xl md:text-7xl leading-none tracking-[-0.04em]">
-              {parts.day}
-            </span>
-            <div>
-              <div className="text-xs tracking-widest uppercase text-pearl">
-                {parts.month} {parts.year}
-              </div>
-              <div className="text-[11px] text-pearl-60 mt-0.5">
-                {parts.time}
+          <Image
+            src={event.hero_image}
+            alt={event.title}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, 40vw"
+            priority
+          />
+          <div
+            className="absolute inset-0 bg-linear-to-t from-ink/95 via-ink/60 to-ink/30"
+            aria-hidden="true"
+          />
+        </>
+      )}
+
+      <div className="relative p-7 md:p-8 flex flex-col justify-between h-full">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
+            <Calendar size={12} aria-hidden="true" />
+            Volgende bijeenkomst
+          </div>
+          <ArrowUpRight
+            size={16}
+            className="text-pearl-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-pearl"
+            aria-hidden="true"
+          />
+        </div>
+
+        {event && parts ? (
+          <>
+            <div className="mt-6 flex items-baseline gap-4">
+              <span className="font-heading font-semibold text-pearl text-6xl md:text-7xl leading-none tracking-[-0.04em]">
+                {parts.day}
+              </span>
+              <div>
+                <div className="text-xs tracking-widest uppercase text-pearl">
+                  {parts.month} {parts.year}
+                </div>
+                <div className="text-[11px] text-pearl-60 mt-0.5">
+                  {parts.time}
+                </div>
               </div>
             </div>
-          </div>
+            <div className="mt-6">
+              <h3 className="font-heading text-lg md:text-xl font-semibold text-pearl leading-tight">
+                {event.title}
+              </h3>
+              {event.location && (
+                <p className="mt-1 inline-flex items-center gap-1 text-xs text-pearl-60">
+                  <MapPin size={11} aria-hidden="true" />
+                  {event.location}
+                </p>
+              )}
+            </div>
+          </>
+        ) : (
           <div className="mt-6">
-            <h3 className="font-heading text-lg md:text-xl font-semibold text-pearl leading-tight">
-              {event.title}
-            </h3>
-            {event.location && (
-              <p className="mt-1 inline-flex items-center gap-1 text-xs text-pearl-60">
-                <MapPin size={11} aria-hidden="true" />
-                {event.location}
-              </p>
-            )}
+            <div className="font-heading font-semibold text-pearl text-2xl md:text-3xl leading-tight tracking-[-0.02em]">
+              Volgt binnenkort
+            </div>
+            <div className="mt-3 text-[11px] tracking-widest uppercase text-pearl-60">
+              Nieuwe datum wordt gepland
+            </div>
           </div>
-        </>
-      ) : (
-        <div className="mt-6">
-          <div className="font-heading font-semibold text-pearl text-2xl md:text-3xl leading-tight tracking-[-0.02em]">
-            Volgt binnenkort
-          </div>
-          <div className="mt-3 text-[11px] tracking-widest uppercase text-pearl-60">
-            Nieuwe datum wordt gepland
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </Link>
   );
 }
