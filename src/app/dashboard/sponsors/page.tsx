@@ -1,4 +1,6 @@
+import Link from "next/link";
 import Image from "next/image";
+import { Plus, Pencil } from "lucide-react";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import PageHeader from "../PageHeader";
 import DashboardTable from "../DashboardTable";
@@ -33,24 +35,38 @@ async function getSponsors(): Promise<Sponsor[]> {
 
 export default async function SponsorsDashboardPage() {
   const sponsors = await getSponsors();
+  const activeCount = sponsors.filter((s) => s.is_active).length;
 
   return (
     <>
       <PageHeader
         eyebrow="Sponsors"
-        title="Hoofdsponsors"
+        title={`${sponsors.length} hoofdsponsors · ${activeCount} actief`}
         description="Prominent getoond op /sponsors en in de sponsorbanner."
+        action={
+          <Link
+            href="/dashboard/sponsors/new"
+            className="group inline-flex items-center gap-2 rounded-full bg-terracotta px-5 py-2.5 text-sm font-medium text-white hover:bg-terracotta-light transition-all"
+          >
+            <Plus size={14} />
+            Nieuwe sponsor
+          </Link>
+        }
       />
 
       <DashboardTable
         rows={sponsors}
         getKey={(s) => s.id}
+        empty="Nog geen hoofdsponsors — klik op 'Nieuwe sponsor' om er een toe te voegen."
         columns={[
           {
             header: "Bedrijf",
             key: "company",
             cell: (s) => (
-              <div className="flex items-center gap-3">
+              <Link
+                href={`/dashboard/sponsors/${s.id}/edit`}
+                className="group flex items-center gap-3"
+              >
                 <div className="relative h-9 w-9 shrink-0 rounded-full overflow-hidden hairline">
                   <Image
                     src={s.image_url}
@@ -61,10 +77,12 @@ export default async function SponsorsDashboardPage() {
                   />
                 </div>
                 <div>
-                  <div className="font-medium text-pearl">{s.company}</div>
+                  <div className="font-medium text-pearl group-hover:text-terracotta transition-colors">
+                    {s.company}
+                  </div>
                   <div className="text-[11px] text-pearl-60">{s.name}</div>
                 </div>
-              </div>
+              </Link>
             ),
           },
           {
@@ -129,6 +147,21 @@ export default async function SponsorsDashboardPage() {
                 {s.is_active ? "Ja" : "Nee"}
               </span>
             ),
+          },
+          {
+            header: "",
+            key: "edit",
+            cell: (s) => (
+              <Link
+                href={`/dashboard/sponsors/${s.id}/edit`}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-hairline px-3 py-1.5 text-xs text-pearl-80 hover:text-pearl hover:border-pearl/30 transition-colors"
+                aria-label={`Bewerk ${s.company}`}
+              >
+                <Pencil size={12} />
+                Bewerk
+              </Link>
+            ),
+            className: "text-right",
           },
         ]}
       />
