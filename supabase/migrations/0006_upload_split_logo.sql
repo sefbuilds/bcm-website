@@ -25,7 +25,9 @@ ALTER TABLE nbcm_members
 ALTER TABLE nbcm_members DROP COLUMN IF EXISTS name;
 ALTER TABLE nbcm_members
   ADD COLUMN name TEXT
-  GENERATED ALWAYS AS (TRIM(CONCAT(voornaam, ' ', COALESCE(achternaam, '')))) STORED;
+  GENERATED ALWAYS AS (
+    TRIM(voornaam || ' ' || COALESCE(achternaam, ''))
+  ) STORED;
 
 -- 2. Sponsors: add logo_url for marketing logo (separate from profielfoto)
 ALTER TABLE nbcm_sponsors
