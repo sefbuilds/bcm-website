@@ -1,4 +1,5 @@
-import { MapPin } from "lucide-react";
+import Link from "next/link";
+import { MapPin, Plus, Pencil } from "lucide-react";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import PageHeader from "../PageHeader";
 import DashboardTable from "../DashboardTable";
@@ -19,7 +20,9 @@ async function getMembers(): Promise<Member[]> {
   const supabase = getSupabaseAdmin();
   const { data, error } = await supabase
     .from("nbcm_members")
-    .select("id, name, initials, role, company, location, is_public, sort_order, created_at")
+    .select(
+      "id, name, initials, role, company, location, is_public, sort_order, created_at",
+    )
     .order("sort_order", { ascending: true });
   if (error) {
     console.error("[dashboard/leden] failed to load", error);
@@ -30,29 +33,45 @@ async function getMembers(): Promise<Member[]> {
 
 export default async function LedenDashboardPage() {
   const members = await getMembers();
+  const publicCount = members.filter((m) => m.is_public).length;
 
   return (
     <>
       <PageHeader
         eyebrow="Leden"
-        title={`${members.length} leden in de database`}
-        description="Publiek zichtbare leden worden op /leden en op de homepage getoond."
+        title={`${members.length} leden · ${publicCount} publiek zichtbaar`}
+        description="Publiek zichtbare leden verschijnen op /leden en in de homepage preview."
+        action={
+          <Link
+            href="/dashboard/leden/new"
+            className="group inline-flex items-center gap-2 rounded-full bg-terracotta px-5 py-2.5 text-sm font-medium text-white hover:bg-terracotta-light transition-all"
+          >
+            <Plus size={14} />
+            Nieuw lid
+          </Link>
+        }
       />
 
       <DashboardTable
         rows={members}
         getKey={(m) => m.id}
+        empty="Nog geen leden — klik op 'Nieuw lid' om te beginnen."
         columns={[
           {
             header: "Naam",
             key: "name",
             cell: (m) => (
-              <div className="flex items-center gap-3">
+              <Link
+                href={`/dashboard/leden/${m.id}/edit`}
+                className="group flex items-center gap-3"
+              >
                 <span className="inline-flex h-8 w-8 items-center justify-center rounded-full hairline text-pearl text-[11px] font-semibold">
                   {m.initials}
                 </span>
-                <span className="font-medium text-pearl">{m.name}</span>
-              </div>
+                <span className="font-medium text-pearl group-hover:text-terracotta transition-colors">
+                  {m.name}
+                </span>
+              </Link>
             ),
           },
           {
@@ -63,7 +82,9 @@ export default async function LedenDashboardPage() {
           {
             header: "Bedrijf",
             key: "company",
-            cell: (m) => <span className="text-pearl-80">{m.company ?? "—"}</span>,
+            cell: (m) => (
+              <span className="text-pearl-80">{m.company ?? "—"}</span>
+            ),
           },
           {
             header: "Locatie",
@@ -94,6 +115,21 @@ export default async function LedenDashboardPage() {
                 {m.is_public ? "Zichtbaar" : "Verborgen"}
               </span>
             ),
+          },
+          {
+            header: "",
+            key: "edit",
+            cell: (m) => (
+              <Link
+                href={`/dashboard/leden/${m.id}/edit`}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-hairline px-3 py-1.5 text-xs text-pearl-80 hover:text-pearl hover:border-pearl/30 transition-colors"
+                aria-label={`Bewerk ${m.name}`}
+              >
+                <Pencil size={12} />
+                Bewerk
+              </Link>
+            ),
+            className: "text-right",
           },
         ]}
       />
