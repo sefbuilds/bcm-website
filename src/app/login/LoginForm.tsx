@@ -31,25 +31,39 @@ export default function LoginForm({ initialError = null }: Props) {
 
   if (submittedEmail) {
     return (
-      <div className="rounded-xl border border-olive/40 bg-olive/10 p-6 text-center space-y-3">
-        <div className="mx-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-olive/20 text-olive">
-          <Mail size={18} aria-hidden="true" />
+      <div className="space-y-4">
+        <div className="rounded-xl border border-olive/40 bg-olive/10 p-6 text-center space-y-3">
+          <div className="mx-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-olive/20 text-olive">
+            <Mail size={18} aria-hidden="true" />
+          </div>
+          <h2 className="font-heading text-xl font-semibold text-pearl">
+            Check je inbox
+          </h2>
+          <p className="text-sm text-pearl-80 leading-relaxed">
+            Als{" "}
+            <span className="text-pearl font-medium">{submittedEmail}</span>{" "}
+            een dashboard-account heeft, vind je een login-link in je inbox.
+            De link is 60 minuten geldig.
+          </p>
         </div>
-        <h2 className="font-heading text-xl font-semibold text-pearl">
-          Check je inbox
-        </h2>
-        <p className="text-sm text-pearl-80 leading-relaxed">
-          Als <span className="text-pearl font-medium">{submittedEmail}</span>{" "}
-          een dashboard-account heeft, vind je een login-link in je inbox.
-          De link is 60 minuten geldig.
-        </p>
+
+        <div
+          role="alert"
+          className="rounded-lg border-2 border-red-500/60 bg-red-500/10 px-4 py-3"
+        >
+          <p className="text-sm font-medium text-red-500 leading-relaxed">
+            ⚠ Kijk ook in je spam / ongewenste mail — onze login-links
+            belanden daar soms.
+          </p>
+        </div>
+
         <button
           type="button"
           onClick={() => {
             setSubmittedEmail(null);
             setError(null);
           }}
-          className="text-xs text-pearl-60 hover:text-pearl transition-colors underline"
+          className="block w-full text-center text-xs text-pearl-60 hover:text-pearl transition-colors underline"
         >
           Ander e-mailadres proberen
         </button>

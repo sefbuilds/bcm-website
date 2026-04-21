@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welkom bij NBCM</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      background-color: #faf5ea;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Arial,
+        sans-serif;
+      color: #132530;
+      -webkit-font-smoothing: antialiased;
+    "
+  >
+    <table
+      role="presentation"
+      cellspacing="0"
+      cellpadding="0"
+      border="0"
+      width="100%"
+      style="background-color: #faf5ea; padding: 40px 20px"
+    >
+      <tr>
+        <td align="center">
+          <table
+            role="presentation"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            width="560"
+            style="
+              max-width: 560px;
+              background-color: #ffffff;
+              border: 1px solid rgba(19, 37, 48, 0.08);
+              border-radius: 16px;
+              overflow: hidden;
+            "
+          >
+            <tr>
+              <td style="padding: 40px 40px 0 40px">
+                <div
+                  style="
+                    font-family: Georgia, serif;
+                    font-size: 22px;
+                    font-weight: 700;
+                    letter-spacing: 0.24em;
+                    color: #1b2a4a;
+                    text-transform: uppercase;
+                  "
+                >
+                  NBCM
+                </div>
+                <div
+                  style="
+                    font-size: 10px;
+                    letter-spacing: 0.3em;
+                    color: #6b7680;
+                    text-transform: uppercase;
+                    margin-top: 6px;
+                  "
+                >
+                  Nederlandstalige Business Club Mallorca
+                </div>
+                <div
+                  style="
+                    height: 1px;
+                    background: linear-gradient(
+                      to right,
+                      #b8923e,
+                      rgba(184, 146, 62, 0.1)
+                    );
+                    margin-top: 28px;
+                  "
+                ></div>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding: 32px 40px">
+                <h1
+                  style="
+                    font-family: Georgia, serif;
+                    font-size: 32px;
+                    font-weight: 600;
+                    color: #132530;
+                    margin: 0 0 16px 0;
+                    letter-spacing: -0.02em;
+                    line-height: 1.15;
+                  "
+                >
+                  Welkom bij NBCM.
+                </h1>
+                <p
+                  style="
+                    font-size: 15px;
+                    color: #3a4a55;
+                    line-height: 1.6;
+                    margin: 0 0 24px 0;
+                  "
+                >
+                  Je bent uitgenodigd voor het NBCM dashboard. Klik op de knop
+                  hieronder om je account te activeren en een wachtwoord te
+                  kiezen.
+                </p>
+                <table
+                  role="presentation"
+                  cellspacing="0"
+                  cellpadding="0"
+                  border="0"
+                  style="margin: 28px 0"
+                >
+                  <tr>
+                    <td style="background-color: #c4572a; border-radius: 999px">
+                      <a
+                        href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=invite&next=/welcome"
+                        style="
+                          display: inline-block;
+                          padding: 14px 32px;
+                          color: #ffffff;
+                          text-decoration: none;
+                          font-weight: 500;
+                          font-size: 15px;
+                        "
+                        >Account activeren →</a
+                      >
+                    </td>
+                  </tr>
+                </table>
+                <p
+                  style="
+                    font-size: 13px;
+                    color: #6b7680;
+                    line-height: 1.6;
+                    margin: 24px 0 0 0;
+                  "
+                >
+                  Deze link is 24 uur geldig.
+                </p>
+              </td>
+            </tr>
+            <tr>
+              <td
+                style="
+                  padding: 24px 40px 40px 40px;
+                  border-top: 1px solid rgba(19, 37, 48, 0.08);
+                  font-size: 10px;
+                  color: #6b7680;
+                  letter-spacing: 0.24em;
+                  text-transform: uppercase;
+                  font-weight: 600;
+                "
+              >
+                NBCM · Palma · Mallorca
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
