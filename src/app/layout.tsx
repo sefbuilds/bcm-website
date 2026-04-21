@@ -17,7 +17,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://nederlandstaligebusinessclub.nl"),
+  metadataBase: new URL("https://nbcmallorca.com"),
   title: {
     default: `${SITE_INFO.fullName} | ${SITE_INFO.name}`,
     template: `%s | ${SITE_INFO.name}`,
