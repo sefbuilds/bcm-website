@@ -13,6 +13,7 @@ export type SponsorInput = {
   website: string;
   website_label: string;
   image_url: string;
+  logo_url: string;
   linkedin: string;
   instagram: string;
   is_active: boolean;
@@ -52,6 +53,7 @@ function normalize(input: SponsorInput): {
       website,
       website_label,
       image_url,
+      logo_url: input.logo_url.trim() || null,
       linkedin: input.linkedin.trim() || null,
       instagram: input.instagram.trim() || null,
       is_active: !!input.is_active,

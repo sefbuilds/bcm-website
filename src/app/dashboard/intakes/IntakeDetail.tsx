@@ -5,6 +5,7 @@ import {
   labelForValue,
   type IntakeField,
 } from "@/lib/intake-schema";
+import ConvertButtons from "./ConvertButtons";
 
 type Intake = {
   id: string;
@@ -183,6 +184,10 @@ export default function IntakeDetail({ intake }: { intake: Intake | null }) {
             />
           )}
         </dl>
+
+        <div className="mt-6 pt-5 hairline-t">
+          <ConvertButtons intakeId={intake.id} />
+        </div>
       </header>
 
       <div className="p-6 md:p-8 space-y-10">

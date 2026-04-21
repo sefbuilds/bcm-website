@@ -7,7 +7,8 @@ export const dynamic = "force-dynamic";
 
 type DBRow = {
   id: string;
-  name: string;
+  voornaam: string;
+  achternaam: string | null;
   initials: string;
   role: string | null;
   company: string | null;
@@ -31,25 +32,30 @@ export default async function EditMemberPage({
   const { data, error } = await supabase
     .from("nbcm_members")
     .select(
-      "id, name, initials, role, company, location, bio, image_url, website, linkedin, instagram, is_public, sort_order",
+      "id, voornaam, achternaam, initials, role, company, location, bio, image_url, website, linkedin, instagram, is_public, sort_order",
     )
     .eq("id", id)
     .maybeSingle<DBRow>();
 
   if (error || !data) notFound();
 
+  const fullName = [data.voornaam, data.achternaam]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <>
       <PageHeader
         eyebrow="Leden · Bewerken"
-        title={data.name}
+        title={fullName}
         description={data.role ? `${data.role} · ${data.company ?? ""}` : undefined}
       />
       <MemberForm
         mode="edit"
         memberId={data.id}
         initial={{
-          name: data.name,
+          voornaam: data.voornaam,
+          achternaam: data.achternaam ?? "",
           initials: data.initials,
           role: data.role ?? "",
           company: data.company ?? "",

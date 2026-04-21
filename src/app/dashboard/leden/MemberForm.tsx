@@ -4,6 +4,7 @@ import { useState, useTransition, type FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
 import { MALLORCA_REGIONS } from "@/lib/constants";
+import { ImageUpload } from "../ImageUpload";
 import {
   createMemberAction,
   updateMemberAction,
@@ -19,7 +20,8 @@ type Props = {
 };
 
 const EMPTY: MemberInput = {
-  name: "",
+  voornaam: "",
+  achternaam: "",
   initials: "",
   role: "",
   company: "",
@@ -35,17 +37,27 @@ const EMPTY: MemberInput = {
 
 export default function MemberForm({ mode, memberId, initial }: Props) {
   const [state, setState] = useState<MemberInput>({ ...EMPTY, ...initial });
+  const [initialsTouched, setInitialsTouched] = useState(
+    Boolean(initial?.initials),
+  );
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [deletePending, startDelete] = useTransition();
 
-  const update = <K extends keyof MemberInput>(key: K, value: MemberInput[K]) =>
-    setState((s) => ({ ...s, [key]: value }));
-
-  const onNameBlur = () => {
-    if (!state.initials.trim() && state.name.trim()) {
-      update("initials", autoInitials(state.name));
-    }
+  const update = <K extends keyof MemberInput>(
+    key: K,
+    value: MemberInput[K],
+  ) => {
+    setState((s) => {
+      const next = { ...s, [key]: value };
+      if (
+        !initialsTouched &&
+        (key === "voornaam" || key === "achternaam")
+      ) {
+        next.initials = autoInitials(next.voornaam, next.achternaam);
+      }
+      return next;
+    });
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -63,7 +75,7 @@ export default function MemberForm({ mode, memberId, initial }: Props) {
   const handleDelete = () => {
     if (!memberId) return;
     const sure = window.confirm(
-      `Verwijder "${state.name}" uit de ledenlijst?`,
+      `Verwijder "${state.voornaam} ${state.achternaam}" uit de ledenlijst?`,
     );
     if (!sure) return;
     setError(null);
@@ -86,20 +98,26 @@ export default function MemberForm({ mode, memberId, initial }: Props) {
       </div>
 
       <div className="rounded-2xl hairline bg-ink-2 p-6 md:p-8 space-y-5">
-        <div className="grid gap-5 sm:grid-cols-[2fr_1fr]">
+        <div className="grid gap-5 sm:grid-cols-[1fr_1fr_140px]">
           <Field
-            label="Naam *"
-            value={state.name}
-            onChange={(v) => update("name", v)}
-            onBlur={onNameBlur}
+            label="Voornaam *"
+            value={state.voornaam}
+            onChange={(v) => update("voornaam", v)}
             required
-            placeholder="Volledige naam"
+          />
+          <Field
+            label="Achternaam"
+            value={state.achternaam}
+            onChange={(v) => update("achternaam", v)}
           />
           <Field
             label="Initialen"
-            hint="Automatisch afgeleid van naam als leeg"
+            hint="Auto-gegenereerd"
             value={state.initials}
-            onChange={(v) => update("initials", v.toUpperCase())}
+            onChange={(v) => {
+              setInitialsTouched(true);
+              update("initials", v.toUpperCase());
+            }}
             placeholder="SB"
           />
         </div>
@@ -141,13 +159,17 @@ export default function MemberForm({ mode, memberId, initial }: Props) {
           </select>
         </div>
 
-        <Textarea
-          label="Bio"
-          hint="Korte omschrijving — nog niet publiek getoond, handig voor eigen bestuurs-overzicht"
-          value={state.bio}
-          onChange={(v) => update("bio", v)}
-          rows={3}
-        />
+        <div>
+          <label className="block text-[11px] font-medium tracking-[0.24em] uppercase text-pearl-60 mb-2">
+            Bio
+          </label>
+          <textarea
+            value={state.bio}
+            onChange={(e) => update("bio", e.target.value)}
+            rows={3}
+            className="w-full rounded-lg hairline bg-ink px-4 py-2.5 text-sm text-pearl placeholder:text-pearl-60/60 focus:border-terracotta focus:outline-none transition-colors resize-y"
+          />
+        </div>
       </div>
 
       <div className="rounded-2xl hairline bg-ink-2 p-6 md:p-8 space-y-5">
@@ -155,13 +177,13 @@ export default function MemberForm({ mode, memberId, initial }: Props) {
           Profiel &amp; links
         </h3>
 
-        <Field
-          label="Profielfoto (pad of URL)"
-          hint="Bijv. /members/sophie.jpg of https://…"
+        <ImageUpload
+          label="Profielfoto"
+          hint="JPEG, PNG of WebP. Max 6MB."
+          folder="members"
           value={state.image_url}
           onChange={(v) => update("image_url", v)}
-          placeholder="/members/sophie.jpg"
-          monospace
+          shape="circle"
         />
 
         <div className="grid gap-5 sm:grid-cols-3">
@@ -192,14 +214,14 @@ export default function MemberForm({ mode, memberId, initial }: Props) {
         </h3>
         <Toggle
           label="Publiek zichtbaar"
-          hint="Uit = alleen binnen dashboard, niet op /leden of homepage"
+          hint="Uit = alleen binnen dashboard"
           value={state.is_public}
           onChange={(v) => update("is_public", v)}
         />
         <Field
           label="Sorteer-volgorde"
           type="number"
-          hint="Lagere waarden verschijnen eerder op de ledenlijst"
+          hint="Lagere waarden eerst"
           value={state.sort_order.toString()}
           onChange={(v) => update("sort_order", parseInt(v, 10) || 0)}
         />
@@ -255,21 +277,17 @@ function Field({
   hint,
   value,
   onChange,
-  onBlur,
   type = "text",
   placeholder,
   required,
-  monospace,
 }: {
   label: string;
   hint?: string;
   value: string;
   onChange: (v: string) => void;
-  onBlur?: () => void;
   type?: string;
   placeholder?: string;
   required?: boolean;
-  monospace?: boolean;
 }) {
   return (
     <div>
@@ -280,41 +298,9 @@ function Field({
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onBlur={onBlur}
         placeholder={placeholder}
         required={required}
-        className={`w-full rounded-lg hairline bg-ink px-4 py-2.5 text-pearl placeholder:text-pearl-60/60 focus:border-terracotta focus:outline-none transition-colors ${
-          monospace ? "font-mono text-[13px]" : "text-sm"
-        }`}
-      />
-      {hint && <p className="mt-1.5 text-[11px] text-pearl-60">{hint}</p>}
-    </div>
-  );
-}
-
-function Textarea({
-  label,
-  hint,
-  value,
-  onChange,
-  rows = 3,
-}: {
-  label: string;
-  hint?: string;
-  value: string;
-  onChange: (v: string) => void;
-  rows?: number;
-}) {
-  return (
-    <div>
-      <label className="block text-[11px] font-medium tracking-[0.24em] uppercase text-pearl-60 mb-2">
-        {label}
-      </label>
-      <textarea
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        rows={rows}
-        className="w-full rounded-lg hairline bg-ink px-4 py-2.5 text-sm text-pearl placeholder:text-pearl-60/60 focus:border-terracotta focus:outline-none transition-colors resize-y"
+        className="w-full rounded-lg hairline bg-ink px-4 py-2.5 text-sm text-pearl placeholder:text-pearl-60/60 focus:border-terracotta focus:outline-none transition-colors"
       />
       {hint && <p className="mt-1.5 text-[11px] text-pearl-60">{hint}</p>}
     </div>

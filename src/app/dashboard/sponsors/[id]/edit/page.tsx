@@ -12,6 +12,7 @@ type DBRow = {
   website: string;
   website_label: string;
   image_url: string;
+  logo_url: string | null;
   linkedin: string | null;
   instagram: string | null;
   is_active: boolean;
@@ -28,7 +29,7 @@ export default async function EditSponsorPage({
   const { data, error } = await supabase
     .from("nbcm_sponsors")
     .select(
-      "id, name, company, website, website_label, image_url, linkedin, instagram, is_active, sort_order",
+      "id, name, company, website, website_label, image_url, logo_url, linkedin, instagram, is_active, sort_order",
     )
     .eq("id", id)
     .maybeSingle<DBRow>();
@@ -51,6 +52,7 @@ export default async function EditSponsorPage({
           website: data.website,
           website_label: data.website_label,
           image_url: data.image_url,
+          logo_url: data.logo_url ?? "",
           linkedin: data.linkedin ?? "",
           instagram: data.instagram ?? "",
           is_active: data.is_active,

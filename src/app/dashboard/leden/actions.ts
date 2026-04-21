@@ -9,7 +9,8 @@ import { autoInitials } from "./initials";
 export type MemberActionResult = { ok: false; error: string } | { ok: true };
 
 export type MemberInput = {
-  name: string;
+  voornaam: string;
+  achternaam: string;
   initials: string;
   role: string;
   company: string;
@@ -27,15 +28,19 @@ function normalize(input: MemberInput): {
   row: Record<string, unknown>;
   error?: string;
 } {
-  const name = input.name.trim();
-  if (!name) return { row: {}, error: "Naam is verplicht." };
+  const voornaam = input.voornaam.trim();
+  const achternaam = input.achternaam.trim();
+  if (!voornaam) return { row: {}, error: "Voornaam is verplicht." };
 
   const initials =
-    (input.initials.trim() || autoInitials(name)).toUpperCase().slice(0, 4);
+    (input.initials.trim() || autoInitials(voornaam, achternaam))
+      .toUpperCase()
+      .slice(0, 4);
 
   return {
     row: {
-      name,
+      voornaam,
+      achternaam: achternaam || null,
       initials,
       role: input.role.trim() || null,
       company: input.company.trim() || null,
@@ -58,8 +63,6 @@ function invalidateAll() {
   revalidatePath("/dashboard/leden");
   revalidatePath("/dashboard");
 }
-
-/* -------------------------------------------------------------------------- */
 
 export async function createMemberAction(
   input: MemberInput,

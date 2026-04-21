@@ -12,6 +12,7 @@ type Sponsor = {
   website: string;
   website_label: string;
   image_url: string;
+  logo_url: string | null;
   linkedin: string | null;
   instagram: string | null;
   is_active: boolean;
@@ -23,7 +24,7 @@ async function getSponsors(): Promise<Sponsor[]> {
   const { data, error } = await supabase
     .from("nbcm_sponsors")
     .select(
-      "id, name, company, website, website_label, image_url, linkedin, instagram, is_active, sort_order",
+      "id, name, company, website, website_label, image_url, logo_url, linkedin, instagram, is_active, sort_order",
     )
     .order("sort_order", { ascending: true });
   if (error) {
