@@ -124,7 +124,7 @@
                       "
                     >
                       <a
-                        href="{{ .ConfirmationURL }}"
+                        href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/dashboard"
                         style="
                           display: inline-block;
                           padding: 14px 32px;
@@ -163,7 +163,7 @@
                     line-height: 1.5;
                   "
                 >
-                  {{ .ConfirmationURL }}
+                  {{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=magiclink&next=/dashboard
                 </p>
               </td>
             </tr>
