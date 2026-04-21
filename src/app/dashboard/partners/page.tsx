@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { Plus, Pencil } from "lucide-react";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import PageHeader from "../PageHeader";
 import DashboardTable from "../DashboardTable";
@@ -38,16 +40,33 @@ export default async function PartnersDashboardPage() {
         eyebrow="Partners"
         title="Partners & vrienden van de club"
         description={`${byTier.partner} partners · ${byTier.vriend} vrienden`}
+        action={
+          <Link
+            href="/dashboard/partners/new"
+            className="group inline-flex items-center gap-2 rounded-full bg-terracotta px-5 py-2.5 text-sm font-medium text-white hover:bg-terracotta-light transition-all"
+          >
+            <Plus size={14} />
+            Nieuwe partner
+          </Link>
+        }
       />
 
       <DashboardTable
         rows={partners}
         getKey={(p) => p.id}
+        empty="Nog geen partners — klik op 'Nieuwe partner' om te beginnen."
         columns={[
           {
             header: "Naam",
             key: "name",
-            cell: (p) => <span className="font-medium text-pearl">{p.name}</span>,
+            cell: (p) => (
+              <Link
+                href={`/dashboard/partners/${p.id}/edit`}
+                className="group font-medium text-pearl hover:text-terracotta transition-colors"
+              >
+                {p.name}
+              </Link>
+            ),
           },
           {
             header: "Tier",
@@ -98,6 +117,21 @@ export default async function PartnersDashboardPage() {
                 {p.is_active ? "Ja" : "Nee"}
               </span>
             ),
+          },
+          {
+            header: "",
+            key: "edit",
+            cell: (p) => (
+              <Link
+                href={`/dashboard/partners/${p.id}/edit`}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-hairline px-3 py-1.5 text-xs text-pearl-80 hover:text-pearl hover:border-pearl/30 transition-colors"
+                aria-label={`Bewerk ${p.name}`}
+              >
+                <Pencil size={12} />
+                Bewerk
+              </Link>
+            ),
+            className: "text-right",
           },
         ]}
       />
