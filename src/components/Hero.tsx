@@ -277,13 +277,21 @@ function BentoNextEvent({
 
       <div className="relative p-7 md:p-8 flex flex-col justify-between h-full">
         <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
+          <div
+            className={`flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase ${
+              hasHero ? "text-gold" : "text-terracotta"
+            }`}
+          >
             <Calendar size={12} aria-hidden="true" />
             Volgende bijeenkomst
           </div>
           <ArrowUpRight
             size={16}
-            className="text-pearl-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-pearl"
+            className={`transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
+              hasHero
+                ? "text-white/70 group-hover:text-white"
+                : "text-pearl-60 group-hover:text-pearl"
+            }`}
             aria-hidden="true"
           />
         </div>
@@ -291,24 +299,44 @@ function BentoNextEvent({
         {event && parts ? (
           <>
             <div className="mt-6 flex items-baseline gap-4">
-              <span className="font-heading font-semibold text-pearl text-6xl md:text-7xl leading-none tracking-[-0.04em]">
+              <span
+                className={`font-heading font-semibold text-6xl md:text-7xl leading-none tracking-[-0.04em] ${
+                  hasHero ? "text-white" : "text-pearl"
+                }`}
+              >
                 {parts.day}
               </span>
               <div>
-                <div className="text-xs tracking-widest uppercase text-pearl">
+                <div
+                  className={`text-xs tracking-widest uppercase ${
+                    hasHero ? "text-white" : "text-pearl"
+                  }`}
+                >
                   {parts.month} {parts.year}
                 </div>
-                <div className="text-[11px] text-pearl-60 mt-0.5">
+                <div
+                  className={`text-[11px] mt-0.5 ${
+                    hasHero ? "text-white/70" : "text-pearl-60"
+                  }`}
+                >
                   {parts.time}
                 </div>
               </div>
             </div>
             <div className="mt-6">
-              <h3 className="font-heading text-lg md:text-xl font-semibold text-pearl leading-tight">
+              <h3
+                className={`font-heading text-lg md:text-xl font-semibold leading-tight ${
+                  hasHero ? "text-white" : "text-pearl"
+                }`}
+              >
                 {event.title}
               </h3>
               {event.location && (
-                <p className="mt-1 inline-flex items-center gap-1 text-xs text-pearl-60">
+                <p
+                  className={`mt-1 inline-flex items-center gap-1 text-xs ${
+                    hasHero ? "text-white/75" : "text-pearl-60"
+                  }`}
+                >
                   <MapPin size={11} aria-hidden="true" />
                   {event.location}
                 </p>
