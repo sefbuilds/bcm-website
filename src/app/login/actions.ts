@@ -1,44 +1,47 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createSupabaseServer } from "@/lib/supabase-server";
-import { getSupabaseAdmin } from "@/lib/supabase";
 
-export type SignInResult = { ok: false; error: string };
+export type SignInResult = { ok: true } | { ok: false; error: string };
 
-export async function signInAction(formData: FormData): Promise<SignInResult> {
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  const password = String(formData.get("password") ?? "");
+/**
+ * Stuur een magic link naar het opgegeven adres. Supabase zal alleen
+ * een link sturen als er al een auth.users rij bestaat — admins worden
+ * handmatig toegevoegd via de Supabase dashboard, dus we zetten
+ * shouldCreateUser op false.
+ */
+export async function requestMagicLinkAction(
+  formData: FormData,
+): Promise<SignInResult> {
+  const email = String(formData.get("email") ?? "")
+    .trim()
+    .toLowerCase();
 
-  if (!email || !password) {
-    return { ok: false, error: "Vul e-mail en wachtwoord in." };
+  if (!email || !/.+@.+\..+/.test(email)) {
+    return { ok: false, error: "Vul een geldig e-mailadres in." };
   }
+
+  const h = await headers();
+  const host =
+    h.get("x-forwarded-host") ?? h.get("host") ?? "www.nbcmallorca.com";
+  const proto = h.get("x-forwarded-proto") ?? "https";
+  const origin = `${proto}://${host}`;
 
   const supabase = await createSupabaseServer();
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { error } = await supabase.auth.signInWithOtp({
     email,
-    password,
+    options: {
+      shouldCreateUser: false,
+      emailRedirectTo: `${origin}/auth/confirm?next=/dashboard`,
+    },
   });
 
-  if (error || !data.user) {
-    return { ok: false, error: "Ongeldige inloggegevens." };
+  if (error) {
+    console.error("[login:requestMagicLink]", error);
+    // Don't leak whether the email exists. Show a generic success response
+    // so a malicious visitor can't enumerate admin addresses.
   }
 
-  const admin = getSupabaseAdmin();
-  const { data: adminRow } = await admin
-    .from("nbcm_admins")
-    .select("id")
-    .eq("user_id", data.user.id)
-    .maybeSingle();
-
-  if (!adminRow) {
-    await supabase.auth.signOut();
-    return {
-      ok: false,
-      error:
-        "Deze account heeft geen toegang tot het dashboard. Neem contact op met het bestuur.",
-    };
-  }
-
-  redirect("/dashboard");
+  return { ok: true };
 }
