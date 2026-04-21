@@ -114,18 +114,34 @@ export default async function NextEvent() {
                 }`}
               >
                 <div>
-                  <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
+                  <div
+                    className={`flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase ${
+                      hasHero ? "text-gold" : "text-terracotta"
+                    }`}
+                  >
                     <Calendar size={12} aria-hidden="true" />
                     {weekday}
                   </div>
-                  <div className="mt-8 font-heading font-semibold text-pearl text-8xl md:text-9xl leading-[0.85] tracking-[-0.05em]">
+                  <div
+                    className={`mt-8 font-heading font-semibold text-8xl md:text-9xl leading-[0.85] tracking-[-0.05em] ${
+                      hasHero ? "text-white" : "text-pearl"
+                    }`}
+                  >
                     {day}
                   </div>
-                  <div className="mt-4 text-sm tracking-[0.2em] uppercase text-pearl-80">
+                  <div
+                    className={`mt-4 text-sm tracking-[0.2em] uppercase ${
+                      hasHero ? "text-white/85" : "text-pearl-80"
+                    }`}
+                  >
                     {month} {year}
                   </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-pearl-60">
+                <div
+                  className={`flex items-center gap-2 text-sm ${
+                    hasHero ? "text-white/70" : "text-pearl-60"
+                  }`}
+                >
                   <Clock size={14} aria-hidden="true" />
                   {timeRange}
                 </div>
@@ -134,15 +150,27 @@ export default async function NextEvent() {
               <div className="p-10 md:p-14 flex flex-col justify-between">
                 <div>
                   {event.tag && (
-                    <span className="inline-block text-[10px] font-medium tracking-[0.24em] uppercase text-olive mb-5">
+                    <span
+                      className={`inline-block text-[10px] font-medium tracking-[0.24em] uppercase mb-5 ${
+                        hasHero ? "text-gold" : "text-olive"
+                      }`}
+                    >
                       {event.tag}
                     </span>
                   )}
-                  <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-semibold text-pearl tracking-[-0.03em] leading-[1.05] text-balance">
+                  <h3
+                    className={`font-heading text-3xl md:text-4xl lg:text-5xl font-semibold tracking-[-0.03em] leading-[1.05] text-balance ${
+                      hasHero ? "text-white" : "text-pearl"
+                    }`}
+                  >
                     {event.title}
                   </h3>
                   {event.location && (
-                    <p className="mt-5 inline-flex items-center gap-1.5 text-pearl-60">
+                    <p
+                      className={`mt-5 inline-flex items-center gap-1.5 ${
+                        hasHero ? "text-white/75" : "text-pearl-60"
+                      }`}
+                    >
                       <MapPin size={15} aria-hidden="true" />
                       {event.location}
                     </p>
@@ -150,7 +178,7 @@ export default async function NextEvent() {
                   {event.description && (
                     <p
                       className={`mt-6 leading-relaxed text-lg max-w-xl ${
-                        hasHero ? "text-pearl/90" : "text-pearl-80"
+                        hasHero ? "text-white/90" : "text-pearl-80"
                       }`}
                     >
                       {event.description}
