@@ -54,8 +54,9 @@ export default async function LoginPage({
                 Inloggen.
               </h1>
               <p className="mt-3 text-sm text-pearl-80 leading-relaxed">
-                Alleen voor bestuursleden en ontwikkelaars. Geen account?
-                Neem contact op met het bestuur.
+                Alleen voor bestuursleden en ontwikkelaars. Vul je e-mail
+                in; we sturen een eenmalige login-link — geen wachtwoord
+                nodig.
               </p>
             </div>
 
