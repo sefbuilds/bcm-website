@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { Plus, Pencil } from "lucide-react";
 import { getSupabaseAdmin } from "@/lib/supabase";
 import PageHeader from "../PageHeader";
 import DashboardTable from "../DashboardTable";
@@ -68,12 +70,21 @@ export default async function EventsDashboardPage() {
       <PageHeader
         eyebrow="Events"
         title={`${upcoming.length} komend · ${past.length} verleden`}
-        description="Beheer de agenda via Supabase. Aanmeldingen per event worden automatisch geteld."
+        description="Beheer de agenda. Wijzigingen zijn direct zichtbaar op de site."
+        action={
+          <Link
+            href="/dashboard/events/new"
+            className="group inline-flex items-center gap-2 rounded-full bg-terracotta px-5 py-2.5 text-sm font-medium text-white hover:bg-terracotta-light transition-all"
+          >
+            <Plus size={14} />
+            Nieuw event
+          </Link>
+        }
       />
 
       <DashboardTable
         rows={events}
-        empty="Nog geen events aangemaakt."
+        empty="Nog geen events aangemaakt — klik op 'Nieuw event' om te beginnen."
         getKey={(e) => e.id}
         columns={[
           {
@@ -102,12 +113,17 @@ export default async function EventsDashboardPage() {
             header: "Titel",
             key: "title",
             cell: (e) => (
-              <div>
-                <div className="font-medium text-pearl">{e.title}</div>
+              <Link
+                href={`/dashboard/events/${e.id}/edit`}
+                className="group block"
+              >
+                <div className="font-medium text-pearl group-hover:text-terracotta transition-colors">
+                  {e.title}
+                </div>
                 <div className="text-[11px] text-pearl-60 mt-0.5 font-mono">
                   {e.slug}
                 </div>
-              </div>
+              </Link>
             ),
           },
           {
@@ -168,6 +184,21 @@ export default async function EventsDashboardPage() {
                 )}
               </span>
             ),
+          },
+          {
+            header: "",
+            key: "edit",
+            cell: (e) => (
+              <Link
+                href={`/dashboard/events/${e.id}/edit`}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-hairline px-3 py-1.5 text-xs text-pearl-80 hover:text-pearl hover:border-pearl/30 transition-colors"
+                aria-label={`Bewerk ${e.title}`}
+              >
+                <Pencil size={12} />
+                Bewerk
+              </Link>
+            ),
+            className: "text-right",
           },
         ]}
       />
