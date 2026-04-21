@@ -92,7 +92,7 @@ export const SITE_INFO = {
     "Het netwerk voor Nederlandstalige ondernemers op de Balearen.",
   motto:
     "Samen kunnen we meer, samen weten we meer en samen verdienen we meer.",
-  email: "info@nederlandstaligebusinessclub.nl",
+  email: "info@nbcmallorca.com",
   location: "Mallorca, Balearen",
   foundedYear: 2019,
   facebookUrl: "https://facebook.com",
