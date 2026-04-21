@@ -6,7 +6,8 @@ import DashboardTable from "../DashboardTable";
 
 type Member = {
   id: string;
-  name: string;
+  voornaam: string;
+  achternaam: string | null;
   initials: string;
   role: string | null;
   company: string | null;
@@ -21,7 +22,7 @@ async function getMembers(): Promise<Member[]> {
   const { data, error } = await supabase
     .from("nbcm_members")
     .select(
-      "id, name, initials, role, company, location, is_public, sort_order, created_at",
+      "id, voornaam, achternaam, initials, role, company, location, is_public, sort_order, created_at",
     )
     .order("sort_order", { ascending: true });
   if (error) {
@@ -69,7 +70,7 @@ export default async function LedenDashboardPage() {
                   {m.initials}
                 </span>
                 <span className="font-medium text-pearl group-hover:text-terracotta transition-colors">
-                  {m.name}
+                  {[m.voornaam, m.achternaam].filter(Boolean).join(" ")}
                 </span>
               </Link>
             ),
@@ -123,7 +124,7 @@ export default async function LedenDashboardPage() {
               <Link
                 href={`/dashboard/leden/${m.id}/edit`}
                 className="inline-flex items-center gap-1.5 rounded-lg border border-hairline px-3 py-1.5 text-xs text-pearl-80 hover:text-pearl hover:border-pearl/30 transition-colors"
-                aria-label={`Bewerk ${m.name}`}
+                aria-label={`Bewerk ${m.voornaam}`}
               >
                 <Pencil size={12} />
                 Bewerk

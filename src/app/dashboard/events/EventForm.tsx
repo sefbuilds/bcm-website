@@ -3,6 +3,8 @@
 import { useState, useTransition, type FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { EVENT_TAGS } from "@/lib/constants";
+import { ImageUpload, MultiImageUpload } from "../ImageUpload";
 import {
   createEventAction,
   updateEventAction,
@@ -38,25 +40,28 @@ export default function EventForm({ mode, eventId, initial }: Props) {
     ...initial,
     photos: initial?.photos ?? initial?.photos_array?.join("\n") ?? "",
   }));
+  const [photosArr, setPhotosArr] = useState<string[]>(
+    () => initial?.photos_array ?? [],
+  );
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [deletePending, startDelete] = useTransition();
 
-  const update = <K extends keyof EventInput>(
-    key: K,
-    value: EventInput[K],
-  ) => {
+  const update = <K extends keyof EventInput>(key: K, value: EventInput[K]) =>
     setState((s) => ({ ...s, [key]: value }));
-  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setError(null);
+    const payload: EventInput = {
+      ...state,
+      photos: photosArr.join("\n"),
+    };
     startTransition(async () => {
       const res =
         mode === "edit" && eventId
-          ? await updateEventAction(eventId, state)
-          : await createEventAction(state);
+          ? await updateEventAction(eventId, payload)
+          : await createEventAction(payload);
       if (res && !res.ok) setError(res.error);
     });
   };
@@ -64,7 +69,7 @@ export default function EventForm({ mode, eventId, initial }: Props) {
   const handleDelete = () => {
     if (!eventId) return;
     const sure = window.confirm(
-      `Weet je zeker dat je "${state.title}" wilt verwijderen? Registraties voor dit event worden ook verwijderd.`,
+      `Weet je zeker dat je "${state.title}" wilt verwijderen? Registraties worden ook verwijderd.`,
     );
     if (!sure) return;
     setError(null);
@@ -76,7 +81,7 @@ export default function EventForm({ mode, eventId, initial }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div>
         <Link
           href="/dashboard/events"
           className="inline-flex items-center gap-1.5 text-[11px] tracking-[0.24em] uppercase text-pearl-60 hover:text-pearl"
@@ -93,14 +98,6 @@ export default function EventForm({ mode, eventId, initial }: Props) {
           onChange={(v) => update("title", v)}
           required
         />
-        <Field
-          label="Slug"
-          hint="Wordt automatisch gegenereerd uit de titel als je dit leeg laat. Alleen letters, cijfers en streepjes."
-          value={state.slug}
-          onChange={(v) => update("slug", v)}
-          placeholder="koningsdag-bij-santina-2026"
-          monospace
-        />
         <Textarea
           label="Omschrijving"
           value={state.description}
@@ -114,12 +111,27 @@ export default function EventForm({ mode, eventId, initial }: Props) {
             onChange={(v) => update("location", v)}
             placeholder="Santina, Mallorca"
           />
-          <Field
-            label="Tag"
-            value={state.tag}
-            onChange={(v) => update("tag", v)}
-            placeholder="Sociaal · Business · Bestuur"
-          />
+          <div>
+            <label className="block text-[11px] font-medium tracking-[0.24em] uppercase text-pearl-60 mb-2">
+              Tag
+            </label>
+            <select
+              value={state.tag}
+              onChange={(e) => update("tag", e.target.value)}
+              className="w-full rounded-lg hairline bg-ink px-4 py-2.5 text-sm text-pearl focus:border-terracotta focus:outline-none transition-colors"
+            >
+              <option value="">— geen —</option>
+              {EVENT_TAGS.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+              {state.tag &&
+                !EVENT_TAGS.includes(
+                  state.tag as (typeof EVENT_TAGS)[number],
+                ) && <option value={state.tag}>{state.tag}</option>}
+            </select>
+          </div>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2">
@@ -137,27 +149,33 @@ export default function EventForm({ mode, eventId, initial }: Props) {
             onChange={(v) => update("end_at_local", v)}
           />
         </div>
+
+        {mode === "edit" && (
+          <p className="text-[11px] text-pearl-60">
+            Slug (URL): <span className="font-mono text-pearl">{state.slug}</span>
+          </p>
+        )}
       </div>
 
-      <div className="rounded-2xl hairline bg-ink-2 p-6 md:p-8 space-y-5">
+      <div className="rounded-2xl hairline bg-ink-2 p-6 md:p-8 space-y-6">
         <h3 className="text-[10px] font-medium tracking-[0.24em] uppercase text-pearl-60">
           Visueel
         </h3>
-        <Field
-          label="Hero image URL of pad"
-          hint="Bijvoorbeeld: /events/koningsdag-2026/hero.jpg of een https:// URL"
+        <ImageUpload
+          label="Hero image"
+          hint="JPEG, PNG of WebP. Max 6MB. Wordt gebruikt als achtergrond op homepage en /events."
+          folder="events/hero"
           value={state.hero_image}
           onChange={(v) => update("hero_image", v)}
-          placeholder="/events/slug/hero.jpg"
-          monospace
+          shape="landscape"
         />
-        <Textarea
+
+        <MultiImageUpload
           label="Foto's"
-          hint="Één pad per regel (of komma-gescheiden). Worden getoond in het RecentEvent-grid als dit event een past-event is."
-          value={state.photos}
-          onChange={(v) => update("photos", v)}
-          rows={4}
-          mono
+          hint="Sfeerbeelden voor het RecentEvent-grid. Sleep-volgorde op hover."
+          folder="events/photos"
+          value={photosArr}
+          onChange={setPhotosArr}
         />
       </div>
 
@@ -195,7 +213,6 @@ export default function EventForm({ mode, eventId, initial }: Props) {
           <Field
             label="Sorteer-volgorde"
             type="number"
-            hint="Hoger = vroeger in lijsten (zelden nodig, we sorteren op datum)"
             value={state.sort_order.toString()}
             onChange={(v) => update("sort_order", parseInt(v, 10) || 0)}
           />
@@ -255,7 +272,6 @@ function Field({
   type = "text",
   placeholder,
   required,
-  monospace,
 }: {
   label: string;
   hint?: string;
@@ -264,7 +280,6 @@ function Field({
   type?: string;
   placeholder?: string;
   required?: boolean;
-  monospace?: boolean;
 }) {
   return (
     <div>
@@ -277,9 +292,7 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         required={required}
-        className={`w-full rounded-lg hairline bg-ink px-4 py-2.5 text-pearl placeholder:text-pearl-60/60 focus:border-terracotta focus:outline-none transition-colors ${
-          monospace ? "font-mono text-[13px]" : "text-sm"
-        }`}
+        className="w-full rounded-lg hairline bg-ink px-4 py-2.5 text-sm text-pearl placeholder:text-pearl-60/60 focus:border-terracotta focus:outline-none transition-colors"
       />
       {hint && <p className="mt-1.5 text-[11px] text-pearl-60">{hint}</p>}
     </div>
@@ -288,18 +301,14 @@ function Field({
 
 function Textarea({
   label,
-  hint,
   value,
   onChange,
   rows = 3,
-  mono,
 }: {
   label: string;
-  hint?: string;
   value: string;
   onChange: (v: string) => void;
   rows?: number;
-  mono?: boolean;
 }) {
   return (
     <div>
@@ -310,11 +319,8 @@ function Textarea({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         rows={rows}
-        className={`w-full rounded-lg hairline bg-ink px-4 py-2.5 text-pearl placeholder:text-pearl-60/60 focus:border-terracotta focus:outline-none transition-colors resize-y ${
-          mono ? "font-mono text-[13px]" : "text-sm"
-        }`}
+        className="w-full rounded-lg hairline bg-ink px-4 py-2.5 text-sm text-pearl placeholder:text-pearl-60/60 focus:border-terracotta focus:outline-none transition-colors resize-y"
       />
-      {hint && <p className="mt-1.5 text-[11px] text-pearl-60">{hint}</p>}
     </div>
   );
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useTransition, type FormEvent } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { ImageUpload } from "../ImageUpload";
 import {
   createSponsorAction,
   updateSponsorAction,
@@ -23,6 +23,7 @@ const EMPTY: SponsorInput = {
   website: "",
   website_label: "",
   image_url: "",
+  logo_url: "",
   linkedin: "",
   instagram: "",
   is_active: true,
@@ -64,11 +65,6 @@ export default function SponsorForm({ mode, sponsorId, initial }: Props) {
       if (res && !res.ok) setError(res.error);
     });
   };
-
-  const canPreview =
-    state.image_url.startsWith("/") ||
-    state.image_url.startsWith("http://") ||
-    state.image_url.startsWith("https://");
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
@@ -136,38 +132,29 @@ export default function SponsorForm({ mode, sponsorId, initial }: Props) {
         </div>
       </div>
 
-      <div className="rounded-2xl hairline bg-ink-2 p-6 md:p-8 space-y-5">
+      <div className="rounded-2xl hairline bg-ink-2 p-6 md:p-8 space-y-6">
         <h3 className="text-[10px] font-medium tracking-[0.24em] uppercase text-pearl-60">
-          Profielfoto
+          Afbeeldingen
         </h3>
 
-        <Field
-          label="Profielfoto URL of pad *"
-          hint="Bijv. /sponsors/youssef-el-idrissi.png of https://…"
+        <ImageUpload
+          label="Profielfoto"
+          hint="Portretfoto van de contactpersoon. JPEG, PNG of WebP. Max 6MB."
+          folder="sponsors/photos"
           value={state.image_url}
           onChange={(v) => update("image_url", v)}
           required
-          placeholder="/sponsors/voornaam-achternaam.png"
-          monospace
+          shape="circle"
         />
 
-        {canPreview && state.image_url && (
-          <div className="flex items-center gap-4 rounded-lg hairline bg-ink p-4">
-            <div className="relative h-16 w-16 shrink-0 rounded-full overflow-hidden hairline">
-              <Image
-                src={state.image_url}
-                alt="preview"
-                fill
-                sizes="64px"
-                className="object-cover"
-                unoptimized
-              />
-            </div>
-            <div className="text-[11px] text-pearl-60">
-              Voorvertoning (als de URL laadt)
-            </div>
-          </div>
-        )}
+        <ImageUpload
+          label="Bedrijfslogo"
+          hint="Wordt getoond op /sponsors en in de sponsorbanner naast de bedrijfsnaam."
+          folder="sponsors/logos"
+          value={state.logo_url}
+          onChange={(v) => update("logo_url", v)}
+          shape="landscape"
+        />
       </div>
 
       <div className="rounded-2xl hairline bg-ink-2 p-6 md:p-8 space-y-5">

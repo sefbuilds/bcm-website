@@ -124,6 +124,17 @@ export default async function SponsorsPage() {
                       aria-hidden="true"
                     />
 
+                    {s.logo_url && (
+                      <div className="relative mb-6 h-12 w-full flex items-center">
+                        <Image
+                          src={s.logo_url}
+                          alt={`${s.company} logo`}
+                          width={200}
+                          height={48}
+                          className="object-contain object-left max-h-12 w-auto"
+                        />
+                      </div>
+                    )}
                     <div className="relative flex items-start gap-6">
                       <div className="relative h-20 w-20 md:h-24 md:w-24 shrink-0 rounded-full overflow-hidden hairline">
                         <Image

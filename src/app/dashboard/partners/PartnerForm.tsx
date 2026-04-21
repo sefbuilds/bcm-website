@@ -3,6 +3,7 @@
 import { useState, useTransition, type FormEvent } from "react";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2 } from "lucide-react";
+import { ImageUpload } from "../ImageUpload";
 import {
   createPartnerAction,
   updatePartnerAction,
@@ -110,13 +111,13 @@ export default function PartnerForm({ mode, partnerId, initial }: Props) {
           placeholder="https://partner.com"
         />
 
-        <Field
-          label="Logo URL of pad"
-          hint="Optioneel — voor later als we echte logos tonen"
+        <ImageUpload
+          label="Logo"
+          hint="JPEG, PNG of WebP. Max 6MB. Wordt getoond op /sponsors."
+          folder="partners"
           value={state.logo_url}
           onChange={(v) => update("logo_url", v)}
-          placeholder="/partners/nordico-logo.svg"
-          monospace
+          shape="landscape"
         />
       </div>
 
