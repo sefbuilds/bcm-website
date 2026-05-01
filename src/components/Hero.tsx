@@ -1,22 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Calendar,
-  MapPin,
-  Users,
-} from "lucide-react";
-import AuroraBg from "./AuroraBg";
-import Reveal from "./Reveal";
-import Marquee from "./Marquee";
-import {
-  getNextEvent,
-  getFeaturedRecentEvent,
-  getMemberStats,
-  formatEventDay,
-  type DBEvent,
-} from "@/lib/data";
+import { getMemberStats } from "@/lib/data";
 import { STOCK_IMAGES } from "@/lib/constants";
 
 type Props = {
@@ -36,7 +20,7 @@ function renderTitle(title: string, italicWord?: string) {
   return (
     <>
       {title.slice(0, idx)}
-      <em className="italic font-light text-terracotta">
+      <em className="italic font-light text-sunset-light">
         {title.slice(idx, idx + italicWord.length)}
       </em>
       {title.slice(idx + italicWord.length)}
@@ -47,367 +31,130 @@ function renderTitle(title: string, italicWord?: string) {
 export default async function Hero({
   title,
   subtitle,
-  ctaText,
-  ctaHref,
+  ctaText = "Word lid van de club",
+  ctaHref = "/intake?tier=member",
   compact = false,
   italicWord,
   showBento = false,
 }: Props) {
-  const [nextEvent, recentEvent, memberStats] = showBento
-    ? await Promise.all([
-        getNextEvent(),
-        getFeaturedRecentEvent(),
-        getMemberStats(),
-      ])
-    : [null, null, { total: 0, locations: [] }];
+  const memberStats = showBento
+    ? await getMemberStats()
+    : { total: 0, locations: [] };
+
+  if (compact) {
+    return (
+      <section
+        className="relative bg-ocean-deep min-h-[55vh] flex items-end pt-24 md:pt-28 pb-16 md:pb-20"
+        aria-label="Hero"
+      >
+        <div className="relative z-10 container-site">
+          <p className="flex items-center gap-4 text-[0.62rem] tracking-[0.32em] uppercase text-sunset-light font-medium mb-6">
+            <span className="block w-8 h-px bg-sunset" />
+            NBCM · Mallorca
+          </p>
+          <h1 className="font-heading text-warm-text font-light leading-[1.02] text-5xl md:text-6xl">
+            {renderTitle(title, italicWord)}
+          </h1>
+          {subtitle && (
+            <p className="mt-6 max-w-xl text-warm-text/65 text-base md:text-lg leading-relaxed">
+              {subtitle}
+            </p>
+          )}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section
-      className={`relative overflow-hidden pt-20 md:pt-24 ${
-        compact ? "min-h-[55vh]" : "min-h-[100vh]"
-      }`}
+      className="relative bg-ocean-deep grid md:grid-cols-2 min-h-screen pt-[72px]"
       aria-label="Hero"
     >
-      <AuroraBg variant={compact ? "subtle" : "hero"} />
-      <div className="noise" />
-      <div
-        className="absolute inset-x-0 bottom-0 h-40 bg-linear-to-t from-ink to-transparent pointer-events-none"
-        aria-hidden="true"
-      />
+      {/* Left: text */}
+      <div className="flex flex-col justify-center px-6 md:px-[5vw] py-20 md:py-24 relative z-10">
+        <p className="flex items-center gap-4 text-[0.62rem] tracking-[0.32em] uppercase text-sunset-light font-medium mb-7">
+          <span className="block w-8 h-px bg-sunset" />
+          Mallorca · Est. 2019
+        </p>
 
-      <div
-        className={`relative z-10 container-site ${
-          compact ? "py-16 md:py-20" : "pt-8 pb-14 md:pt-12 md:pb-20"
-        }`}
-      >
-        <Reveal>
-          <div className="flex items-center gap-3">
-            <span className="h-px w-12 bg-terracotta" />
-            <span className="text-xs font-medium tracking-widest uppercase text-terracotta">
-              {compact ? "NBCM" : "Business Club · Mallorca"}
-            </span>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.08}>
-          <h1
-            className={`mt-8 font-heading font-semibold text-pearl tracking-[-0.03em] leading-[0.98] text-balance ${
-              compact
-                ? "text-5xl md:text-6xl lg:text-7xl"
-                : "text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[8.5rem]"
-            }`}
-          >
-            {renderTitle(title, italicWord)}
-          </h1>
-        </Reveal>
+        <h1 className="font-heading font-light text-warm-text leading-[1.02] mb-6 text-[clamp(2.8rem,5vw,5.5rem)]">
+          {renderTitle(title, italicWord)}
+        </h1>
 
         {subtitle && (
-          <Reveal delay={0.18}>
-            <p
-              className={`mt-10 max-w-2xl text-pearl-80 leading-relaxed ${
-                compact ? "text-base md:text-lg" : "text-lg md:text-xl"
-              }`}
-            >
-              {subtitle}
-            </p>
-          </Reveal>
+          <p className="max-w-md text-warm-text/65 text-base md:text-[1rem] leading-[1.82] mb-10">
+            {subtitle}
+          </p>
         )}
 
         {ctaText && ctaHref && (
-          <Reveal delay={0.26}>
-            <div className="mt-12 flex flex-wrap gap-3">
-              <Link
-                href={ctaHref}
-                className="group inline-flex items-center gap-2 rounded-full bg-deep-blue px-8 py-4 text-white font-medium transition-colors hover:bg-deep-blue/90"
-              >
-                {ctaText}
-                <ArrowRight
-                  size={16}
-                  className="transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </Link>
-              {!compact && (
-                <Link
-                  href="/events"
-                  className="inline-flex items-center gap-2 rounded-full border border-deep-blue/20 px-8 py-4 text-deep-blue font-medium transition-colors hover:border-deep-blue"
-                >
-                  Volgende event
-                </Link>
-              )}
-            </div>
-          </Reveal>
+          <div className="flex flex-wrap gap-4 mb-16">
+            <Link
+              href={ctaHref}
+              className="inline-flex items-center px-8 py-3.5 bg-sunset text-white font-body text-[0.78rem] font-medium tracking-[0.08em] uppercase transition-colors hover:bg-sunset-light"
+            >
+              {ctaText}
+            </Link>
+            <Link
+              href="/over-ons"
+              className="inline-flex items-center px-8 py-3.5 bg-transparent text-warm-text font-body text-[0.78rem] font-medium tracking-[0.08em] uppercase border border-warm-text/30 transition-colors hover:border-warm-text"
+            >
+              Lees meer over ons
+            </Link>
+          </div>
         )}
 
-        {showBento && !compact && (
-          <Reveal delay={0.35}>
-            <div className="mt-16 md:mt-24 grid gap-3 md:grid-cols-12">
-              <BentoNextEvent
-                className="md:col-span-5"
-                event={nextEvent}
-              />
-              <BentoAtmosphere
-                className="md:col-span-4"
-                event={recentEvent}
-              />
-              <div className="md:col-span-3 grid gap-3">
-                <BentoMembers total={memberStats.total} />
-                <BentoLocation />
-              </div>
-            </div>
-          </Reveal>
+        {showBento && (
+          <div className="flex border-t border-warm-text/12 pt-8 gap-8">
+            <HeroStat value="2019" label="Opgericht" hasBorder />
+            <HeroStat
+              value={memberStats.total > 0 ? `${memberStats.total}` : "Groeiend"}
+              label="Ondernemers"
+              hasBorder
+            />
+            <HeroStat value="NL · BE · ZA" label="Community" />
+          </div>
         )}
       </div>
 
-      {!compact && (
-        <div className="absolute inset-x-0 bottom-0 z-10 hairline-t">
-          <div className="py-4">
-            <Marquee
-              items={[
-                "Samen kunnen we meer",
-                "Samen weten we meer",
-                "Samen verdienen we meer",
-                "Ondernemen op Mallorca",
-                "Netwerken in het Nederlands",
-              ]}
-              speed="slow"
-              separator={
-                <span
-                  className="mx-10 text-terracotta/60"
-                  aria-hidden="true"
-                >
-                  ◆
-                </span>
-              }
-              itemClassName="font-heading italic text-pearl/70 text-sm tracking-wide"
-              className="mask-fade-x"
-            />
-          </div>
-        </div>
-      )}
+      {/* Right: image */}
+      <div className="relative overflow-hidden min-h-[60vh] md:min-h-screen">
+        <Image
+          src={STOCK_IMAGES.coastSunset}
+          alt="Mallorca — kust bij zonsondergang"
+          fill
+          className="object-cover object-center"
+          sizes="(max-width: 768px) 100vw, 50vw"
+          priority
+        />
+        <div
+          className="absolute inset-0 bg-linear-to-r from-ocean-deep/40 to-transparent md:to-transparent md:from-ocean-deep/40"
+          aria-hidden="true"
+        />
+      </div>
     </section>
   );
 }
 
-function BentoAtmosphere({
-  className,
-  event,
+function HeroStat({
+  value,
+  label,
+  hasBorder = false,
 }: {
-  className?: string;
-  event: DBEvent | null;
+  value: string;
+  label: string;
+  hasBorder?: boolean;
 }) {
-  const imageSrc =
-    event?.photos?.[0] || event?.hero_image || STOCK_IMAGES.mallorcaCoast;
-  const startParts = event ? formatEventDay(event.start_at) : null;
-
-  return (
-    <Link
-      href={event ? `/events` : "/events"}
-      className={`group relative rounded-2xl overflow-hidden min-h-[200px] ${className}`}
-    >
-      <Image
-        src={imageSrc}
-        alt={event ? `Sfeerbeeld ${event.title}` : "Mallorca"}
-        fill
-        className="object-cover transition-transform duration-700 group-hover:scale-105"
-        sizes="(max-width: 768px) 100vw, 33vw"
-        priority
-      />
-      <div className="absolute inset-0 bg-linear-to-t from-ink/90 via-ink/40 to-ink/20" />
-      <div className="relative p-7 md:p-8 h-full flex flex-col justify-between">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-gold">
-            <Calendar size={12} aria-hidden="true" />
-            {event ? "Laatste event" : "Mallorca"}
-          </div>
-          <ArrowUpRight
-            size={16}
-            className="text-pearl transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-            aria-hidden="true"
-          />
-        </div>
-        <div>
-          <div className="font-heading font-semibold text-pearl text-xl md:text-2xl leading-tight tracking-[-0.02em]">
-            {event?.title ?? "Het hele jaar door events"}
-          </div>
-          <div className="mt-2 text-[11px] tracking-[0.24em] uppercase text-pearl/80">
-            {event && startParts
-              ? `${startParts.day} ${startParts.month} ${startParts.year} · ${event.location ?? "Mallorca"}`
-              : "Borrels · Diners · Masterclasses"}
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-function BentoNextEvent({
-  className,
-  event,
-}: {
-  className?: string;
-  event: DBEvent | null;
-}) {
-  const parts = event ? formatEventDay(event.start_at) : null;
-  const hasHero = Boolean(event?.hero_image);
-
-  return (
-    <Link
-      href={event ? `/events/aanmelden?event=${event.slug}` : "/events"}
-      className={`group relative rounded-2xl overflow-hidden flex flex-col justify-between min-h-[200px] transition-all ${
-        hasHero ? "" : "glass hover:bg-pearl/[0.07]"
-      } ${className}`}
-    >
-      {hasHero && event?.hero_image && (
-        <>
-          <Image
-            src={event.hero_image}
-            alt={event.title}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 40vw"
-            priority
-          />
-          <div
-            className="absolute inset-0 bg-linear-to-t from-navy/95 via-navy/75 to-navy/45"
-            aria-hidden="true"
-          />
-        </>
-      )}
-
-      <div className="relative p-7 md:p-8 flex flex-col justify-between h-full">
-        <div className="flex items-start justify-between">
-          <div
-            className={`flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase ${
-              hasHero ? "text-gold" : "text-terracotta"
-            }`}
-          >
-            <Calendar size={12} aria-hidden="true" />
-            Volgende bijeenkomst
-          </div>
-          <ArrowUpRight
-            size={16}
-            className={`transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 ${
-              hasHero
-                ? "text-white/70 group-hover:text-white"
-                : "text-pearl-60 group-hover:text-pearl"
-            }`}
-            aria-hidden="true"
-          />
-        </div>
-
-        {event && parts ? (
-          <>
-            <div className="mt-6 flex items-baseline gap-4">
-              <span
-                className={`font-heading font-semibold text-6xl md:text-7xl leading-none tracking-[-0.04em] ${
-                  hasHero ? "text-white" : "text-pearl"
-                }`}
-              >
-                {parts.day}
-              </span>
-              <div>
-                <div
-                  className={`text-xs tracking-widest uppercase ${
-                    hasHero ? "text-white" : "text-pearl"
-                  }`}
-                >
-                  {parts.month} {parts.year}
-                </div>
-                <div
-                  className={`text-[11px] mt-0.5 ${
-                    hasHero ? "text-white/70" : "text-pearl-60"
-                  }`}
-                >
-                  {parts.time}
-                </div>
-              </div>
-            </div>
-            <div className="mt-6">
-              <h3
-                className={`font-heading text-lg md:text-xl font-semibold leading-tight ${
-                  hasHero ? "text-white" : "text-pearl"
-                }`}
-              >
-                {event.title}
-              </h3>
-              {event.location && (
-                <p
-                  className={`mt-1 inline-flex items-center gap-1 text-xs ${
-                    hasHero ? "text-white/75" : "text-pearl-60"
-                  }`}
-                >
-                  <MapPin size={11} aria-hidden="true" />
-                  {event.location}
-                </p>
-              )}
-            </div>
-          </>
-        ) : (
-          <div className="mt-6">
-            <div className="font-heading font-semibold text-pearl text-2xl md:text-3xl leading-tight tracking-[-0.02em]">
-              Volgt binnenkort
-            </div>
-            <div className="mt-3 text-[11px] tracking-widest uppercase text-pearl-60">
-              Nieuwe datum wordt gepland
-            </div>
-          </div>
-        )}
-      </div>
-    </Link>
-  );
-}
-
-function BentoMembers({ className, total }: { className?: string; total: number }) {
-  return (
-    <Link
-      href="/leden"
-      className={`group glass rounded-2xl p-5 md:p-6 flex flex-col justify-between min-h-[94px] transition-all hover:bg-pearl/[0.07] ${className}`}
-    >
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
-          <Users size={12} aria-hidden="true" />
-          Leden
-        </div>
-        <ArrowUpRight
-          size={14}
-          className="text-pearl-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-pearl"
-          aria-hidden="true"
-        />
-      </div>
-
-      <div className="mt-3 flex items-baseline gap-3">
-        <div className="font-heading font-semibold text-pearl text-4xl md:text-5xl leading-none tracking-[-0.04em]">
-          {total}
-        </div>
-        <div className="text-[10px] tracking-widest uppercase text-pearl-60">
-          Ondernemers
-        </div>
-      </div>
-    </Link>
-  );
-}
-
-function BentoLocation({ className }: { className?: string }) {
   return (
     <div
-      className={`glass rounded-2xl p-5 md:p-6 flex flex-col justify-between min-h-[94px] ${className}`}
+      className={`pr-6 md:pr-12 ${hasBorder ? "md:mr-12 md:border-r md:border-warm-text/10" : ""}`}
     >
-      <div className="flex items-center gap-2 text-[10px] tracking-[0.24em] uppercase text-terracotta">
-        <MapPin size={12} aria-hidden="true" />
-        Basis
-      </div>
-
-      <div className="mt-3">
-        <div className="font-heading font-semibold text-pearl text-xl md:text-2xl leading-tight tracking-[-0.02em]">
-          Palma de Mallorca
-        </div>
-        <div className="mt-2 flex items-center gap-2 text-[10px] tracking-widest uppercase text-pearl-60">
-          <span>39.57° N</span>
-          <span className="h-1 w-1 rounded-full bg-pearl-60" />
-          <span>2.65° E</span>
-        </div>
-      </div>
+      <span className="block font-heading text-3xl md:text-[2.2rem] font-light text-warm-text leading-none">
+        {value}
+      </span>
+      <span className="block mt-2 text-[0.62rem] font-medium tracking-[0.15em] uppercase text-warm-text/40">
+        {label}
+      </span>
     </div>
   );
 }

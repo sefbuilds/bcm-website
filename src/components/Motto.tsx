@@ -1,112 +1,65 @@
-import Image from "next/image";
 import Reveal from "./Reveal";
-import { STOCK_IMAGES } from "@/lib/constants";
 
 const PILLARS = [
   {
-    number: "01",
+    num: "01",
     keyword: "Kunnen",
-    line: "Samen kunnen we meer.",
-    description:
-      "Warme introducties die écht werken. Deuren die openen omdat iemand voor je instaat.",
-    image: STOCK_IMAGES.wineCheers,
-    alt: "Proosten op samenwerking",
+    line: "Warme introducties.",
+    body: "Deuren die openen omdat iemand voor je instaat. Introducties die écht werken binnen een vertrouwd netwerk van Nederlandstalige ondernemers.",
   },
   {
-    number: "02",
+    num: "02",
     keyword: "Weten",
-    line: "Samen weten we meer.",
-    description:
-      "Kennis delen over ondernemen op Mallorca — fiscaal, juridisch, cultureel. Niemand staat er alleen voor.",
-    image: STOCK_IMAGES.candlelitDinner,
-    alt: "Kennis delen aan tafel",
+    line: "Kennis delen.",
+    body: "Ondernemen op Mallorca is anders. Fiscaal, juridisch, cultureel. In dit netwerk sta je er niet alleen voor en leer je van mensen die het al doen.",
   },
   {
-    number: "03",
+    num: "03",
     keyword: "Verdienen",
-    line: "Samen verdienen we meer.",
-    description:
-      "Samenwerkingen die ontstaan uit vertrouwen. Zakelijke groei op basis van échte connecties.",
-    image: STOCK_IMAGES.yachtHarbor,
-    alt: "Zakelijke groei op Mallorca",
+    line: "Samen groeien.",
+    body: "Samenwerkingen die ontstaan uit vertrouwen. Zakelijke groei op basis van échte connecties op het eiland.",
   },
 ];
 
 export default function Motto() {
   return (
-    <section className="bg-ink-2 hairline-t hairline-b">
-      <div className="container-site pt-24 md:pt-32 pb-16 md:pb-20">
+    <section className="bg-ocean-deep py-20 md:py-24 px-6 md:px-[5vw]" id="waarom">
+      <div className="max-w-[520px] mb-12 md:mb-14">
         <Reveal>
-          <div className="flex items-center gap-3">
-            <span className="h-px w-12 bg-terracotta" />
-            <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-terracotta">
-              Ons motto
-            </span>
-          </div>
+          <span className="text-[0.62rem] tracking-[0.32em] uppercase text-sunset font-medium mb-4 block">
+            Waarom NBCM
+          </span>
         </Reveal>
-
-        <Reveal delay={0.1}>
-          <blockquote className="mt-10 font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-semibold text-pearl tracking-[-0.03em] leading-[1] text-balance max-w-6xl">
-            Samen{" "}
-            <em className="italic font-light text-terracotta">kunnen</em>{" "}
-            we meer, samen{" "}
-            <em className="italic font-light text-terracotta">weten</em>{" "}
-            we meer, samen{" "}
-            <em className="italic font-light text-terracotta">
-              verdienen
-            </em>{" "}
-            we meer.
-          </blockquote>
+        <Reveal delay={0.08}>
+          <h2 className="font-heading font-light leading-[1.08] text-[clamp(2rem,4vw,3.5rem)] text-warm-text">
+            Drie redenen om{" "}
+            <em className="italic text-sunset-light">lid te worden.</em>
+          </h2>
         </Reveal>
       </div>
 
-      <div className="grid md:grid-cols-3">
-        {PILLARS.map((pillar, i) => (
-          <Reveal key={pillar.keyword} delay={i * 0.08}>
-            <Pillar pillar={pillar} />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-[2px]">
+        {PILLARS.map((p, i) => (
+          <Reveal key={p.num} delay={i * 0.08}>
+            <article
+              className={`p-10 md:p-9 h-full border-t-2 border-sunset ${
+                i % 2 === 0 ? "bg-ocean" : "bg-ocean-mid"
+              }`}
+            >
+              <div className="font-heading italic font-light text-[2.5rem] text-sunset opacity-60 leading-none mb-5">
+                {p.num}
+              </div>
+              <div className="font-heading font-light text-[1.5rem] text-warm-text mb-3">
+                <em className="italic text-sunset-light">{p.keyword}.</em>{" "}
+                {p.line}
+              </div>
+              <p className="text-[0.85rem] text-warm-text/65 leading-[1.75]">
+                {p.body}
+              </p>
+            </article>
           </Reveal>
         ))}
       </div>
     </section>
-  );
-}
-
-function Pillar({ pillar }: { pillar: (typeof PILLARS)[number] }) {
-  return (
-    <article className="group relative overflow-hidden min-h-[560px] md:min-h-[640px] flex items-end border-t border-hairline md:border-t-0 md:border-l md:first:border-l-0 md:border-l-hairline">
-      <Image
-        src={pillar.image}
-        alt={pillar.alt}
-        fill
-        className="object-cover transition-transform duration-[1200ms] group-hover:scale-[1.04]"
-        sizes="(max-width: 768px) 100vw, 33vw"
-      />
-
-      <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/70 to-ink/10" />
-      <div className="absolute inset-0 bg-linear-to-br from-ink/20 via-transparent to-transparent" />
-
-      <div className="absolute top-8 left-8 right-8 md:top-10 md:left-10 md:right-10 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="h-px w-8 bg-gold" />
-          <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-gold">
-            Pijler {pillar.number}
-          </span>
-        </div>
-      </div>
-
-      <div className="relative p-8 md:p-10 lg:p-12 w-full">
-        <h3 className="font-heading font-semibold text-pearl tracking-[-0.04em] leading-[0.9] text-6xl md:text-7xl lg:text-[5.5rem]">
-          <em className="italic font-light text-terracotta">
-            {pillar.keyword}.
-          </em>
-        </h3>
-        <p className="mt-6 text-pearl text-base md:text-lg font-medium tracking-tight">
-          {pillar.line}
-        </p>
-        <p className="mt-3 text-pearl-80 leading-relaxed text-sm md:text-base max-w-sm">
-          {pillar.description}
-        </p>
-      </div>
-    </article>
   );
 }

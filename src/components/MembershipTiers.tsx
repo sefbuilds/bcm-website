@@ -1,43 +1,21 @@
 import Link from "next/link";
-import { ArrowUpRight, Check } from "lucide-react";
 import Reveal from "./Reveal";
 import { MEMBERSHIP_TIERS, type MembershipTier } from "@/lib/constants";
 
 type Props = {
-  background?: "ink" | "ink-2";
+  background?: "cream" | "sand";
   eyebrow?: string;
   heading?: string;
   italicWord?: string;
 };
 
-const ACCENT_STYLES = {
-  terracotta: {
-    eyebrow: "text-terracotta",
-    divider: "bg-terracotta",
-    iconWrap: "bg-terracotta/10 text-terracotta",
-    cta: "bg-terracotta hover:bg-terracotta-light text-white",
-  },
-  gold: {
-    eyebrow: "text-gold",
-    divider: "bg-gold",
-    iconWrap: "bg-gold/15 text-gold",
-    cta: "bg-gold hover:bg-gold-light text-ink",
-  },
-  navy: {
-    eyebrow: "text-navy-light",
-    divider: "bg-navy-2",
-    iconWrap: "bg-navy/40 text-white border border-navy-light/30",
-    cta: "bg-navy hover:bg-navy-2 text-white border border-navy-light/30",
-  },
-} as const;
-
 export default function MembershipTiers({
-  background = "ink",
+  background = "cream",
   eyebrow = "Lidmaatschap",
   heading = "Word onderdeel van NBCM.",
   italicWord = "onderdeel",
 }: Props) {
-  const bgClass = background === "ink-2" ? "bg-ink-2" : "bg-ink";
+  const bgClass = background === "sand" ? "bg-sand" : "bg-cream";
 
   const renderHeading = () => {
     if (!italicWord) return heading;
@@ -46,7 +24,7 @@ export default function MembershipTiers({
     return (
       <>
         {heading.slice(0, idx)}
-        <em className="italic font-light text-terracotta">
+        <em className="italic text-sunset">
           {heading.slice(idx, idx + italicWord.length)}
         </em>
         {heading.slice(idx + italicWord.length)}
@@ -55,104 +33,87 @@ export default function MembershipTiers({
   };
 
   return (
-    <section className={`${bgClass} hairline-t hairline-b`}>
-      <div className="container-site py-24 md:py-32">
-        <div className="max-w-3xl">
-          <Reveal>
-            <div className="flex items-center gap-3">
-              <span className="h-px w-10 bg-terracotta" />
-              <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-terracotta">
-                {eyebrow}
-              </span>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h2 className="mt-8 font-heading text-4xl md:text-5xl lg:text-6xl font-semibold text-pearl tracking-[-0.03em] leading-[1.05] text-balance">
-              {renderHeading()}
-            </h2>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <p className="mt-8 text-pearl-80 leading-relaxed text-lg max-w-2xl">
-              Drie manieren om bij te dragen aan en te profiteren van onze
-              Nederlandstalige ondernemersgemeenschap op Mallorca.
-            </p>
-          </Reveal>
-        </div>
+    <section
+      className={`${bgClass} py-20 md:py-24 px-6 md:px-[5vw]`}
+      id="lidmaatschap"
+    >
+      <div className="text-center max-w-[560px] mx-auto mb-14 md:mb-16">
+        <Reveal>
+          <span className="label block mb-4">{eyebrow}</span>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <h2 className="font-heading font-light leading-[1.08] text-[clamp(2rem,4vw,3.5rem)] text-text mb-6">
+            {renderHeading()}
+          </h2>
+        </Reveal>
+        <Reveal delay={0.16}>
+          <p className="text-[0.98rem] leading-[1.85] text-text-muted">
+            Drie manieren om bij te dragen aan en te profiteren van onze
+            Nederlandstalige ondernemersgemeenschap op Mallorca.
+          </p>
+        </Reveal>
+      </div>
 
-        <div className="mt-14 grid gap-3 md:grid-cols-3 md:items-stretch">
-          {MEMBERSHIP_TIERS.map((tier, i) => (
-            <Reveal key={tier.id} delay={i * 0.08}>
-              <TierCard tier={tier} />
-            </Reveal>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-[2px] max-w-[1000px] mx-auto">
+        {MEMBERSHIP_TIERS.map((tier, i) => (
+          <Reveal key={tier.id} delay={i * 0.08}>
+            <TierCard tier={tier} featured={i === 1} />
+          </Reveal>
+        ))}
       </div>
     </section>
   );
 }
 
-function TierCard({ tier }: { tier: MembershipTier }) {
-  const styles = ACCENT_STYLES[tier.accent];
+function TierCard({
+  tier,
+  featured,
+}: {
+  tier: MembershipTier;
+  featured?: boolean;
+}) {
+  const cardBg = featured ? "bg-ocean" : "bg-warm-text";
+  const titleColor = featured ? "text-warm-text" : "text-text";
+  const descColor = featured
+    ? "text-warm-text/60"
+    : "text-text-muted";
+  const benefitColor = featured ? "text-warm-text/85" : "text-text/85";
+  const borderColor = featured ? "border-sunset" : "border-transparent";
 
   return (
-    <article className="group relative h-full glass rounded-2xl p-8 md:p-10 flex flex-col transition-all hover:bg-pearl/[0.07] overflow-hidden">
-      <div
-        className={`absolute inset-x-0 top-0 h-px ${styles.divider}`}
-        aria-hidden="true"
-      />
-      <div
-        className={`absolute -top-20 -right-20 h-48 w-48 rounded-full blur-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 ${
-          tier.accent === "terracotta"
-            ? "bg-terracotta/25"
-            : tier.accent === "gold"
-              ? "bg-gold/25"
-              : "bg-navy-2/40"
-        }`}
-        aria-hidden="true"
-      />
-
-      <div className="relative">
-        <span
-          className={`text-[10px] font-medium tracking-[0.24em] uppercase ${styles.eyebrow}`}
-        >
-          {tier.eyebrow}
-        </span>
-        <h3 className="mt-4 font-heading text-2xl md:text-3xl font-semibold text-pearl tracking-[-0.02em] leading-tight">
-          {tier.title}
-        </h3>
-        <p className="mt-4 text-pearl-80 leading-relaxed">
-          {tier.description}
-        </p>
-      </div>
-
-      <ul className="relative mt-8 pt-6 hairline-t space-y-3 flex-1">
+    <article
+      className={`${cardBg} p-12 px-10 border-t-2 ${borderColor} transition-colors h-full flex flex-col group ${
+        featured ? "" : "hover:bg-cream"
+      }`}
+    >
+      <span className="text-[0.6rem] tracking-[0.28em] uppercase text-sunset font-medium mb-4 block">
+        {tier.eyebrow}
+      </span>
+      <h3 className={`font-heading font-light text-[2rem] mb-2 ${titleColor}`}>
+        {tier.title}
+      </h3>
+      <p className={`text-[0.85rem] leading-[1.7] mb-8 ${descColor}`}>
+        {tier.description}
+      </p>
+      <ul className="list-none mb-10 flex-1">
         {tier.benefits.map((b) => (
-          <li key={b} className="flex items-start gap-3 text-sm text-pearl">
-            <span
-              className={`mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${styles.iconWrap}`}
-            >
-              <Check size={12} aria-hidden="true" />
-            </span>
-            <span className="leading-relaxed">{b}</span>
+          <li
+            key={b}
+            className={`text-[0.83rem] py-2.5 border-b border-sunset/10 flex items-start gap-3 last:border-b-0 ${benefitColor}`}
+          >
+            <span className="text-sunset text-[0.5rem] mt-2 shrink-0">●</span>
+            <span>{b}</span>
           </li>
         ))}
       </ul>
-
-      <div className="relative mt-8">
-        <Link
-          href={tier.ctaHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`group/cta inline-flex items-center gap-2 rounded-full px-6 py-3 font-medium transition-all hover:scale-[1.02] ${styles.cta}`}
-        >
-          {tier.ctaText}
-          <ArrowUpRight
-            size={14}
-            className="transition-transform group-hover/cta:-translate-y-0.5 group-hover/cta:translate-x-0.5"
-            aria-hidden="true"
-          />
-        </Link>
-      </div>
+      <Link
+        href={tier.ctaHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block w-full text-center px-6 py-3.5 bg-sunset text-white text-[0.78rem] font-medium tracking-[0.08em] uppercase font-body transition-colors hover:bg-sunset-light"
+      >
+        {tier.ctaText}
+      </Link>
     </article>
   );
 }

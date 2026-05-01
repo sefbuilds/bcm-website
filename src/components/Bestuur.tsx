@@ -9,45 +9,44 @@ type Props = {
 
 export default function Bestuur({ showIntakeNote = true }: Props) {
   return (
-    <section className="bg-ink">
-      <div className="container-site py-24 md:py-32">
-        <div className="max-w-3xl">
-          <Reveal>
-            <div className="flex items-center gap-3">
-              <span className="h-px w-10 bg-terracotta" />
-              <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-terracotta">
-                Bestuur
-              </span>
-            </div>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <h2 className="mt-8 font-heading text-4xl md:text-5xl lg:text-6xl font-semibold text-pearl tracking-[-0.03em] leading-[1.05] text-balance">
-              De mensen{" "}
-              <em className="italic font-light text-terracotta">
-                achter NBCM
-              </em>
-              .
-            </h2>
-          </Reveal>
-        </div>
-
-        <div className="mt-16 grid gap-8 md:gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {BOARD_MEMBERS.map((member, i) => (
-            <Reveal key={member.name} delay={i * 0.05}>
-              <BestuurCard member={member} />
-            </Reveal>
-          ))}
-        </div>
-
-        {showIntakeNote && (
-          <Reveal delay={0.4}>
-            <p className="mt-12 pt-8 hairline-t text-sm text-pearl-60 max-w-2xl">
-              Uitgebreide profielen, foto&apos;s en achtergronden van de
-              bestuursleden worden aangevuld na de lopende intake-ronde.
-            </p>
-          </Reveal>
-        )}
+    <section
+      className="bg-ocean py-20 md:py-24 px-6 md:px-[5vw]"
+      id="bestuur"
+    >
+      <div className="max-w-[600px] mb-14 md:mb-16">
+        <Reveal>
+          <span className="text-[0.62rem] tracking-[0.32em] uppercase text-sunset font-medium mb-4 block">
+            Bestuur
+          </span>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <h2 className="font-heading font-light leading-[1.08] text-[clamp(2rem,4vw,3.5rem)] text-warm-text mb-6">
+            De mensen{" "}
+            <em className="italic text-sunset-light">achter NBCM.</em>
+          </h2>
+        </Reveal>
+        <Reveal delay={0.16}>
+          <p className="text-[0.98rem] leading-[1.85] text-warm-text/55">
+            Het bestuur bestaat uit actieve ondernemers die de club leiden
+            vanuit eigen ervaring op Mallorca.
+          </p>
+        </Reveal>
       </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 max-w-[1000px] mx-auto">
+        {BOARD_MEMBERS.map((member, i) => (
+          <Reveal key={member.name} delay={i * 0.05}>
+            <BestuurCard member={member} />
+          </Reveal>
+        ))}
+      </div>
+
+      {showIntakeNote && (
+        <p className="mt-14 pt-8 border-t border-sunset/15 text-sm text-warm-text/45 max-w-2xl">
+          Uitgebreide profielen, foto&apos;s en achtergronden van de
+          bestuursleden worden aangevuld na de lopende intake-ronde.
+        </p>
+      )}
     </section>
   );
 }

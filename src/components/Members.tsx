@@ -1,111 +1,92 @@
 import Link from "next/link";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import Image from "next/image";
 import { getMembers } from "@/lib/data";
 import Reveal from "./Reveal";
-import TiltCard from "./TiltCard";
 
 export default async function Members() {
   const members = await getMembers();
   const preview = members.slice(0, 8);
-  const remainder = members.length - preview.length;
+  const remainder = Math.max(0, members.length - preview.length);
 
   return (
-    <section className="bg-ink relative">
-      <div className="container-site py-24 md:py-32">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
-          <div className="max-w-2xl">
-            <Reveal>
-              <div className="flex items-center gap-3">
-                <span className="h-px w-10 bg-terracotta" />
-                <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-terracotta">
-                  Leden
-                </span>
-              </div>
-            </Reveal>
-            <Reveal delay={0.08}>
-              <h2 className="mt-8 font-heading text-4xl md:text-5xl lg:text-6xl font-semibold text-pearl tracking-[-0.03em] leading-[1.05] text-balance">
-                Een netwerk van{" "}
-                <em className="italic font-light text-terracotta">
-                  {members.length} ondernemers
-                </em>
-                .
-              </h2>
-            </Reveal>
-          </div>
-          <Reveal delay={0.15}>
-            <Link
-              href="/leden"
-              className="group inline-flex items-center gap-1.5 text-terracotta hover:text-terracotta-light font-medium"
-            >
-              Alle leden
-              <ArrowUpRight
-                size={16}
-                className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                aria-hidden="true"
-              />
-            </Link>
-          </Reveal>
+    <section className="bg-sand py-20 md:py-24 px-6 md:px-[5vw]" id="leden">
+      <div className="text-center max-w-[560px] mx-auto mb-14 md:mb-16">
+        <Reveal>
+          <span className="label block mb-4">Het netwerk</span>
+        </Reveal>
+        <Reveal delay={0.08}>
+          <h2 className="font-heading font-light leading-[1.08] text-[clamp(2rem,4vw,3.5rem)] text-text">
+            Een groeiend netwerk van{" "}
+            <em className="italic text-sunset">
+              Nederlandstalige ondernemers.
+            </em>
+          </h2>
+        </Reveal>
+      </div>
+
+      {members.length === 0 ? (
+        <div className="max-w-[1100px] mx-auto p-12 text-center text-text-muted bg-cream border border-sunset/12">
+          Leden worden binnenkort toegevoegd.
         </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-[2px] max-w-[1100px] mx-auto">
+          {preview.map((member, i) => (
+            <Reveal key={member.id} delay={i * 0.04}>
+              <article className="group relative bg-cream p-8 cursor-pointer transition-colors hover:bg-[#f7f1e3] overflow-hidden h-full">
+                <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-sunset origin-left scale-x-0 transition-transform group-hover:scale-x-100" />
+                <div className="flex flex-col items-start gap-4">
+                  <div className="w-16 h-16 rounded-full bg-ocean-mid flex items-center justify-center font-heading font-light text-[1.4rem] text-sunset border border-sunset/15 transition-colors group-hover:border-sunset overflow-hidden relative">
+                    {member.image_url ? (
+                      <Image
+                        src={member.image_url}
+                        alt={member.name}
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                      />
+                    ) : (
+                      <span>{member.initials}</span>
+                    )}
+                  </div>
+                  <div className="w-full">
+                    <h3 className="font-heading text-[1.1rem] font-normal text-text leading-tight mb-1">
+                      {member.name}
+                    </h3>
+                    {member.role && (
+                      <p className="text-[0.72rem] text-text-muted leading-[1.4] mb-2 line-clamp-2">
+                        {member.role}
+                      </p>
+                    )}
+                    {member.company && (
+                      <p className="text-[0.68rem] tracking-[0.1em] uppercase text-sunset font-medium">
+                        {member.company}
+                      </p>
+                    )}
+                    {member.location && (
+                      <p className="text-[0.68rem] text-text-muted mt-1.5">
+                        {member.location}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      )}
 
-        {members.length === 0 ? (
-          <div className="rounded-2xl glass p-12 text-center text-pearl-60">
-            Leden worden binnenkort toegevoegd.
-          </div>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {preview.map((member, i) => (
-              <Reveal key={member.id} delay={i * 0.04}>
-                <TiltCard intensity={5}>
-                  <article className="group relative h-full glass rounded-2xl p-6 md:p-7 transition-all hover:bg-pearl/[0.07] overflow-hidden">
-                    <div
-                      className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-terracotta/0 blur-2xl transition-all duration-500 group-hover:bg-terracotta/25"
-                      aria-hidden="true"
-                    />
-                    <div className="relative flex items-center gap-3">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-full hairline text-pearl font-heading text-sm font-semibold">
-                        {member.initials}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="font-medium text-pearl leading-tight truncate">
-                          {member.name}
-                        </div>
-                        <div className="text-xs text-pearl-60 mt-0.5">
-                          {member.role ?? ""}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="relative mt-6 pt-5 hairline-t flex items-center justify-between text-[13px]">
-                      <span className="text-pearl-80 truncate">
-                        {member.company ?? ""}
-                      </span>
-                      <span className="inline-flex items-center gap-1 text-pearl-60 shrink-0 ml-3">
-                        <MapPin size={11} aria-hidden="true" />
-                        {member.location ?? ""}
-                      </span>
-                    </div>
-                  </article>
-                </TiltCard>
-              </Reveal>
-            ))}
-          </div>
-        )}
-
+      <div className="text-center mt-12 flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-center max-w-[1100px] mx-auto">
         {remainder > 0 && (
-          <Reveal delay={0.3}>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 sm:items-center">
-              <p className="text-sm text-pearl-60">
-                En nog {remainder} andere leden uit de Nederlandstalige
-                gemeenschap op Mallorca.
-              </p>
-              <Link
-                href="/leden"
-                className="inline-flex items-center gap-1.5 text-terracotta hover:text-terracotta-light font-medium text-sm"
-              >
-                Bekijk ledenoverzicht →
-              </Link>
-            </div>
-          </Reveal>
+          <p className="text-sm text-text-muted">
+            En nog {remainder} andere leden uit ons netwerk.
+          </p>
         )}
+        <Link
+          href="/leden"
+          className="inline-flex items-center gap-2 px-8 py-3.5 bg-sunset text-white text-[0.78rem] font-medium tracking-[0.08em] uppercase font-body transition-colors hover:bg-sunset-light w-fit mx-auto sm:mx-0"
+        >
+          Word ook lid
+        </Link>
       </div>
     </section>
   );

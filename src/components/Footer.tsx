@@ -1,104 +1,117 @@
 import Link from "next/link";
-import { Mail } from "lucide-react";
-import { NAV_ITEMS, SITE_INFO } from "@/lib/constants";
-
-function FacebookIcon({ size = 16 }: { size?: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M13.5 22v-8h2.7l.4-3.1h-3.1V8.9c0-.9.3-1.6 1.6-1.6h1.7V4.5c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.1v2.4H7.7V14h2.6v8h3.2z" />
-    </svg>
-  );
-}
+import { SITE_INFO } from "@/lib/constants";
 
 export default function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative bg-ink hairline-t">
-      <div className="container-site pt-20 pb-10">
-        <div className="grid gap-14 md:grid-cols-12 md:gap-10">
-          <div className="md:col-span-5">
-            <p className="font-heading font-bold text-2xl tracking-[0.2em] text-pearl">
-              {SITE_INFO.name}
-            </p>
-            <p className="mt-5 text-sm text-pearl-60 leading-relaxed max-w-sm">
-              {SITE_INFO.fullName}.
-            </p>
-            <p className="mt-6 font-heading italic text-gold text-lg leading-relaxed max-w-md">
-              Samen kunnen we meer, samen weten we meer en samen verdienen we meer.
-            </p>
+    <footer
+      className="bg-ocean-deep border-t border-sunset/15 py-16 md:py-20 px-6 md:px-[5vw]"
+      aria-label="Footer"
+    >
+      <div className="grid grid-cols-1 md:grid-cols-[1.5fr_1fr_1fr_1fr] gap-12 md:gap-14 mb-14 pb-12 border-b border-sunset/15 max-w-[1180px] mx-auto">
+        {/* Brand */}
+        <div>
+          <div className="font-heading text-[1.1rem] font-normal tracking-[0.12em] uppercase text-warm-text mb-2">
+            {SITE_INFO.name}
           </div>
-
-          <div className="md:col-span-3">
-            <h2 className="text-[10px] font-medium tracking-[0.24em] uppercase text-pearl-60 mb-5">
-              Navigatie
-            </h2>
-            <ul className="space-y-3">
-              {NAV_ITEMS.map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="text-sm text-pearl-80 hover:text-pearl transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="text-[0.65rem] tracking-[0.16em] uppercase text-sunset font-medium mb-5">
+            {SITE_INFO.fullName}
           </div>
-
-          <div className="md:col-span-4">
-            <h2 className="text-[10px] font-medium tracking-[0.24em] uppercase text-pearl-60 mb-5">
-              Contact
-            </h2>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a
-                  href={`mailto:${SITE_INFO.email}`}
-                  className="inline-flex items-center gap-2 text-pearl-80 hover:text-pearl transition-colors"
-                >
-                  <Mail size={14} aria-hidden="true" />
-                  {SITE_INFO.email}
-                </a>
-              </li>
-              <li className="text-pearl-80">{SITE_INFO.location}</li>
-            </ul>
-            <div className="mt-6">
-              <a
-                href={SITE_INFO.facebookUrl}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full glass text-pearl-60 hover:text-pearl transition-colors"
-                aria-label="Facebook"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <FacebookIcon size={16} />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-20 pt-8 hairline-t flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-[11px] tracking-widest uppercase text-pearl-60">
-          <p>© {year} {SITE_INFO.fullName}</p>
-          <p>Palma · Balearen · 39.57° N · 2.65° E</p>
-          <p>
-            Designed &amp; built by{" "}
-            <a
-              href="https://astrelon.io"
-              target="_blank"
-              rel="noreferrer"
-              className="text-pearl hover:text-gold transition-colors"
-            >
-              Astrelon
-            </a>
+          <p className="text-[0.82rem] text-warm-text/40 leading-[1.75] max-w-sm">
+            Samen kunnen we meer, samen weten we meer en samen verdienen we
+            meer. Het zakelijke thuis voor Nederlandstalige ondernemers op de
+            Balearen.
           </p>
         </div>
+
+        {/* Navigation */}
+        <FooterColumn title="Navigatie">
+          <FooterLink href="/over-ons">Over ons</FooterLink>
+          <FooterLink href="/leden">Leden</FooterLink>
+          <FooterLink href="/events">Events</FooterLink>
+          <FooterLink href="/sponsors">Lidmaatschap</FooterLink>
+        </FooterColumn>
+
+        <FooterColumn title="Club">
+          <FooterLink href="/sponsors">Sponsors</FooterLink>
+          <FooterLink href="/login">Login</FooterLink>
+          <FooterLink href="/contact">Contact</FooterLink>
+        </FooterColumn>
+
+        <FooterColumn title="Contact">
+          <FooterLink href={`mailto:${SITE_INFO.email}`}>
+            {SITE_INFO.email}
+          </FooterLink>
+          <FooterLink>{SITE_INFO.location}</FooterLink>
+          <FooterLink>39.57° N · 2.65° E</FooterLink>
+        </FooterColumn>
+      </div>
+
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 text-[0.72rem] text-warm-text/25 max-w-[1180px] mx-auto">
+        <span>
+          © {year} {SITE_INFO.name} · {SITE_INFO.fullName}
+        </span>
+        <span>
+          Designed in samenwerking met{" "}
+          <a
+            href="https://astrelon.io"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-warm-text/40 hover:text-sunset transition-colors"
+          >
+            Astrelon
+          </a>{" "}
+          ·{" "}
+          <a
+            href="https://clarosea.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-warm-text/40 hover:text-sunset transition-colors"
+          >
+            CLAROSEA
+          </a>
+        </span>
       </div>
     </footer>
+  );
+}
+
+function FooterColumn({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <div className="text-[0.62rem] tracking-[0.2em] uppercase text-sunset font-medium mb-4">
+        {title}
+      </div>
+      <ul className="flex flex-col gap-2.5">{children}</ul>
+    </div>
+  );
+}
+
+function FooterLink({
+  href,
+  children,
+}: {
+  href?: string;
+  children: React.ReactNode;
+}) {
+  if (!href) {
+    return <li className="text-[0.82rem] text-warm-text/45">{children}</li>;
+  }
+  return (
+    <li>
+      <Link
+        href={href}
+        className="text-[0.82rem] text-warm-text/45 hover:text-sunset transition-colors"
+      >
+        {children}
+      </Link>
+    </li>
   );
 }

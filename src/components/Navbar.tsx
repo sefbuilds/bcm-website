@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Menu, X, ArrowUpRight, LogIn, LayoutGrid } from "lucide-react";
+import { Menu, X, LogIn, LayoutGrid } from "lucide-react";
 import { NAV_ITEMS, SITE_INFO } from "@/lib/constants";
-import LiveTime from "./LiveTime";
 
 type NavbarProps = {
   isAdmin?: boolean;
@@ -15,17 +14,19 @@ export default function Navbar({ isAdmin = false }: NavbarProps) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [lastPathname, setLastPathname] = useState(pathname);
+
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    setIsOpen(false);
+  }
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 16);
+    const handleScroll = () => setScrolled(window.scrollY > 80);
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -36,49 +37,40 @@ export default function Navbar({ isAdmin = false }: NavbarProps) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[padding] duration-400 ease-out backdrop-blur-2xl border-b border-sunset/20 ${
         scrolled
-          ? "bg-ink/70 backdrop-blur-xl hairline-b"
-          : "bg-transparent"
+          ? "bg-ocean-deep/97 py-[0.9rem]"
+          : "bg-ocean-deep/97 py-[1.4rem]"
       }`}
+      style={{ paddingLeft: "5vw", paddingRight: "5vw" }}
     >
       <nav
-        className="container-site flex items-center justify-between py-4"
+        className="flex items-center justify-between"
         aria-label="Hoofdnavigatie"
       >
-        <div className="flex items-center gap-4">
-          <Link
-            href="/"
-            className="inline-flex items-baseline gap-2"
-            aria-label={`${SITE_INFO.name} — Home`}
-          >
-            <span className="font-heading font-bold text-lg tracking-[0.24em] text-pearl">
-              {SITE_INFO.name}
-            </span>
-            <span className="hidden xl:inline text-[9px] tracking-[0.3em] uppercase text-pearl-60">
-              Mallorca
-            </span>
-          </Link>
-          <span
-            className="hidden xl:inline-flex items-center gap-2 pl-4 ml-1 border-l border-hairline text-[10px] tracking-[0.24em] uppercase text-pearl-60"
-            aria-label="Lokale tijd Palma"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-terracotta animate-pulse" />
-            <LiveTime className="text-pearl font-medium" showSeconds={false} />
+        <Link
+          href="/"
+          className="flex flex-col gap-0.5 leading-none"
+          aria-label={`${SITE_INFO.name} — Home`}
+        >
+          <span className="font-heading text-[1.6rem] font-medium tracking-[0.22em] text-white uppercase leading-none">
+            {SITE_INFO.name}
           </span>
-        </div>
+          <span className="text-[0.72rem] tracking-[0.15em] uppercase text-white/90 font-normal">
+            {SITE_INFO.fullName}
+          </span>
+        </Link>
 
-        <ul className="hidden lg:flex items-center gap-1 glass rounded-full px-2 py-1.5">
+        <ul className="hidden lg:flex items-center gap-9">
           {NAV_ITEMS.map((item) => {
+            if (item.href === "/") return null;
             const active = pathname === item.href;
             return (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`inline-flex px-3.5 py-1.5 rounded-full text-sm transition-all ${
-                    active
-                      ? "bg-pearl/10 text-pearl"
-                      : "text-pearl-80 hover:text-pearl"
+                  className={`text-[0.75rem] tracking-[0.1em] uppercase font-normal transition-colors ${
+                    active ? "text-sunset" : "text-warm-text/55 hover:text-sunset"
                   }`}
                 >
                   {item.label}
@@ -86,44 +78,38 @@ export default function Navbar({ isAdmin = false }: NavbarProps) {
               </li>
             );
           })}
+          <li>
+            {isAdmin ? (
+              <Link
+                href="/dashboard"
+                className="text-[0.75rem] tracking-[0.1em] uppercase font-medium text-warm-text/55 hover:text-sunset inline-flex items-center gap-1.5"
+              >
+                <LayoutGrid size={13} aria-hidden="true" />
+                Dashboard
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="text-[0.75rem] tracking-[0.1em] uppercase font-medium text-warm-text/55 hover:text-sunset inline-flex items-center gap-1.5"
+              >
+                <LogIn size={13} aria-hidden="true" />
+                Log in
+              </Link>
+            )}
+          </li>
+          <li>
+            <Link
+              href="/intake?tier=member"
+              className="px-5 py-2 border border-sunset text-sunset text-[0.75rem] tracking-[0.1em] uppercase font-medium transition-colors hover:bg-sunset hover:text-warm-text"
+            >
+              Lid worden
+            </Link>
+          </li>
         </ul>
-
-        <div className="hidden lg:flex items-center gap-2">
-          {isAdmin ? (
-            <Link
-              href="/dashboard"
-              className="group inline-flex items-center gap-1.5 rounded-full border border-hairline px-4 py-2 text-sm text-pearl-80 hover:text-pearl hover:border-pearl/30 transition-colors"
-            >
-              <LayoutGrid size={13} aria-hidden="true" />
-              Dashboard
-            </Link>
-          ) : (
-            <Link
-              href="/login"
-              className="group inline-flex items-center gap-1.5 rounded-full border border-hairline px-4 py-2 text-sm text-pearl-80 hover:text-pearl hover:border-pearl/30 transition-colors"
-            >
-              <LogIn size={13} aria-hidden="true" />
-              Log in
-            </Link>
-          )}
-          <Link
-            href="/intake?tier=member"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group inline-flex items-center gap-1.5 rounded-full bg-terracotta px-5 py-2.5 text-sm font-medium text-white transition-all hover:bg-terracotta-light hover:scale-[1.02]"
-          >
-            Lid worden
-            <ArrowUpRight
-              size={14}
-              className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-              aria-hidden="true"
-            />
-          </Link>
-        </div>
 
         <button
           type="button"
-          className="lg:hidden inline-flex items-center justify-center h-10 w-10 rounded-full glass text-pearl"
+          className="lg:hidden inline-flex items-center justify-center h-10 w-10 text-warm-text border border-sunset/30"
           aria-label={isOpen ? "Sluit menu" : "Open menu"}
           aria-expanded={isOpen}
           onClick={() => setIsOpen((v) => !v)}
@@ -134,19 +120,19 @@ export default function Navbar({ isAdmin = false }: NavbarProps) {
 
       {isOpen && (
         <div
-          className="lg:hidden fixed inset-x-0 bottom-0 top-[64px] bg-ink z-40 overflow-y-auto"
+          className="lg:hidden fixed inset-x-0 bottom-0 top-[64px] bg-ocean-deep z-40 overflow-y-auto"
           role="dialog"
           aria-modal="true"
         >
-          <ul className="container-site pt-12 flex flex-col gap-5">
+          <ul className="px-6 pt-12 flex flex-col gap-5">
             {NAV_ITEMS.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className={`block text-3xl font-heading tracking-[-0.02em] ${
+                  className={`block text-3xl font-heading font-light tracking-tight ${
                     pathname === item.href
-                      ? "text-terracotta"
-                      : "text-pearl"
+                      ? "text-sunset"
+                      : "text-warm-text"
                   }`}
                 >
                   {item.label}
@@ -156,17 +142,14 @@ export default function Navbar({ isAdmin = false }: NavbarProps) {
             <li className="pt-6 flex flex-col gap-3">
               <Link
                 href="/intake?tier=member"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-terracotta px-6 py-3 text-white font-medium"
+                className="inline-flex items-center justify-center px-6 py-3 bg-sunset text-warm-text font-medium uppercase tracking-wider text-sm"
               >
                 Lid worden
-                <ArrowUpRight size={16} aria-hidden="true" />
               </Link>
               {isAdmin ? (
                 <Link
                   href="/dashboard"
-                  className="inline-flex items-center gap-2 rounded-full border border-hairline px-6 py-3 text-pearl font-medium"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-sunset/30 text-warm-text uppercase tracking-wider text-sm"
                 >
                   <LayoutGrid size={14} aria-hidden="true" />
                   Dashboard
@@ -174,7 +157,7 @@ export default function Navbar({ isAdmin = false }: NavbarProps) {
               ) : (
                 <Link
                   href="/login"
-                  className="inline-flex items-center gap-2 rounded-full border border-hairline px-6 py-3 text-pearl font-medium"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-sunset/30 text-warm-text uppercase tracking-wider text-sm"
                 >
                   <LogIn size={14} aria-hidden="true" />
                   Log in

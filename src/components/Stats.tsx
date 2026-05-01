@@ -25,22 +25,22 @@ export default async function Stats() {
 
   const tiles = [
     { value: "2019", label: "Opgericht" },
-    { value: String(members), label: "Leden" },
-    { value: String(events), label: "Events" },
-    { value: "1", label: "Eiland" },
+    { value: members > 0 ? String(members) : "—", label: "Leden" },
+    { value: events > 0 ? `${events}+` : "—", label: "Events per jaar" },
+    { value: "NL · BE · ZA", label: "Community" },
   ];
 
   return (
-    <section className="bg-ink hairline-t hairline-b relative">
-      <div className="container-site py-16 md:py-20">
-        <dl className="grid grid-cols-2 md:grid-cols-4 gap-y-10 md:gap-y-0 md:divide-x divide-hairline/50">
+    <section className="bg-cream border-y border-sunset/15">
+      <div className="container-site py-14 md:py-16">
+        <dl className="grid grid-cols-2 md:grid-cols-4 gap-y-10 md:gap-y-0 md:divide-x md:divide-sunset/15">
           {tiles.map((stat, i) => (
             <Reveal key={stat.label} delay={i * 0.06}>
               <div className="md:px-10 first:md:pl-0 last:md:pr-0">
-                <dt className="text-[10px] font-medium tracking-[0.24em] uppercase text-pearl-60">
+                <dt className="text-[0.62rem] font-medium tracking-[0.16em] uppercase text-text-muted">
                   {stat.label}
                 </dt>
-                <dd className="mt-5 font-heading font-semibold text-5xl md:text-6xl lg:text-7xl text-pearl tracking-[-0.04em] leading-none">
+                <dd className="mt-3 font-heading font-light text-3xl md:text-[2.4rem] text-text leading-none">
                   {stat.value}
                 </dd>
               </div>

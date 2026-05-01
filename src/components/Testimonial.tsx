@@ -1,3 +1,4 @@
+import { Star } from "lucide-react";
 import Reveal from "./Reveal";
 
 type Quote = {
@@ -8,9 +9,9 @@ type Quote = {
 };
 
 const DEFAULT_QUOTE: Quote = {
-  body: "Binnen drie maanden had ik via NBCM mijn boekhouder, mijn advocaat én mijn eerste Spaanse klant. Geen harde pitches, maar warme introducties — precies zoals ondernemen zou moeten voelen.",
+  body: "Ik had geen idee dat er zoveel Nederlanders op het eiland wonen, laat staan dat er zoveel ondernemers zijn. Fijn om te groeien en te leren in een netwerk van gelijkgestemden.",
   author: "Sophie van den Berg",
-  role: "Interieurontwerper · Santa Ponsa",
+  role: "Interieurontwerper · Santa Ponsa · Lid sinds 2023",
   initials: "SB",
 };
 
@@ -20,50 +21,34 @@ type Props = {
 
 export default function Testimonial({ quote = DEFAULT_QUOTE }: Props) {
   return (
-    <section className="relative bg-ink-2 overflow-hidden hairline-t hairline-b">
-      <div
-        className="absolute top-1/2 -left-1/4 -translate-y-1/2 h-[80%] w-[60%] rounded-full bg-gold/10 blur-[140px] pointer-events-none"
-        aria-hidden="true"
-      />
-      <div className="noise" />
-      <div className="relative container-site py-28 md:py-40">
-        <div className="max-w-6xl">
-          <Reveal>
-            <div className="flex items-center gap-3">
-              <span className="h-px w-12 bg-gold" />
-              <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-gold">
-                Wat leden zeggen
-              </span>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <blockquote className="mt-14 font-heading text-4xl md:text-6xl lg:text-7xl text-pearl font-semibold tracking-[-0.03em] leading-[1.1] text-balance">
-              <span className="text-gold/60 italic font-light mr-1">
-                &ldquo;
-              </span>
-              {quote.body}
-              <span className="text-gold/60 italic font-light ml-1">
-                &rdquo;
-              </span>
-            </blockquote>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <figcaption className="mt-16 flex items-center gap-4 hairline-t pt-8">
-              <span className="inline-flex h-12 w-12 items-center justify-center rounded-full glass text-pearl font-heading text-sm font-semibold">
-                {quote.initials}
-              </span>
-              <div>
-                <div className="font-medium text-pearl">
-                  {quote.author}
-                </div>
-                <div className="text-sm text-pearl-60">{quote.role}</div>
-              </div>
-            </figcaption>
-          </Reveal>
+    <section className="bg-ocean-deep py-20 md:py-24 px-6 md:px-[5vw] text-center">
+      <Reveal>
+        <div className="inline-flex items-center gap-1 mb-6">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star
+              key={i}
+              size={14}
+              className="text-sunset fill-sunset"
+              aria-hidden
+            />
+          ))}
         </div>
-      </div>
+      </Reveal>
+
+      <Reveal delay={0.08}>
+        <blockquote className="font-heading italic font-light text-[clamp(1.3rem,2.5vw,1.9rem)] text-warm-text/90 max-w-[680px] mx-auto leading-[1.6] mb-8">
+          {quote.body}
+        </blockquote>
+      </Reveal>
+
+      <Reveal delay={0.16}>
+        <div>
+          <div className="font-heading text-[0.95rem] font-normal text-warm-text mb-1">
+            {quote.author}
+          </div>
+          <div className="text-[0.75rem] text-warm-text/40">{quote.role}</div>
+        </div>
+      </Reveal>
     </section>
   );
 }

@@ -38,7 +38,7 @@ export default function SponsorBanner({ sponsors }: Props) {
       }`}
       aria-label="Hoofdsponsors"
     >
-      <div className="bg-ink/85 backdrop-blur-xl hairline-t">
+      <div className="bg-ocean-deep/95 backdrop-blur-xl border-t border-sunset/20">
         <div className="container-site flex items-center justify-between gap-6 py-2.5">
           <div className="flex items-center gap-3 md:gap-5 min-w-0 overflow-hidden">
             <span
@@ -46,15 +46,15 @@ export default function SponsorBanner({ sponsors }: Props) {
               aria-hidden="true"
             >
               <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-gold/70 opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-gold" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sunset/70 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-sunset" />
               </span>
             </span>
-            <span className="hidden sm:inline text-[9px] md:text-[10px] tracking-[0.32em] uppercase text-pearl-60 font-medium shrink-0">
+            <span className="hidden sm:inline text-[9px] md:text-[10px] tracking-[0.32em] uppercase text-warm-text/55 font-medium shrink-0">
               In samenwerking met
             </span>
             <span
-              className="hidden md:inline h-px w-10 bg-hairline-strong shrink-0"
+              className="hidden md:inline h-px w-10 bg-sunset/30 shrink-0"
               aria-hidden="true"
             />
             <ul className="flex items-center gap-4 md:gap-6 min-w-0 overflow-hidden whitespace-nowrap">
@@ -65,13 +65,13 @@ export default function SponsorBanner({ sponsors }: Props) {
                 >
                   <Link
                     href="/sponsors"
-                    className="font-heading text-[13px] md:text-sm font-semibold tracking-[0.04em] text-pearl hover:text-gold transition-colors"
+                    className="font-heading text-[13px] md:text-sm font-medium tracking-[0.04em] text-warm-text hover:text-sunset transition-colors"
                   >
                     {s.company}
                   </Link>
                   {i < sponsors.length - 1 && (
                     <span
-                      className="text-gold/50 text-xs"
+                      className="text-sunset/50 text-xs"
                       aria-hidden="true"
                     >
                       ◆
@@ -83,7 +83,7 @@ export default function SponsorBanner({ sponsors }: Props) {
           </div>
           <Link
             href="/sponsors"
-            className="group hidden sm:inline-flex items-center gap-1 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-pearl-60 hover:text-pearl transition-colors shrink-0"
+            className="group hidden sm:inline-flex items-center gap-1 text-[10px] md:text-[11px] tracking-[0.24em] uppercase text-warm-text/55 hover:text-sunset transition-colors shrink-0"
           >
             <span className="hidden md:inline">Partner worden</span>
             <span className="md:hidden">Info</span>

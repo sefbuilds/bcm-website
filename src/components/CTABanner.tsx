@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import Reveal from "./Reveal";
-import AuroraBg from "./AuroraBg";
 
 type Props = {
   title?: string;
@@ -18,7 +16,7 @@ function renderTitle(title: string, italicWord?: string) {
   return (
     <>
       {title.slice(0, idx)}
-      <em className="italic font-light text-terracotta">
+      <em className="italic text-sunset-light">
         {title.slice(idx, idx + italicWord.length)}
       </em>
       {title.slice(idx + italicWord.length)}
@@ -27,58 +25,53 @@ function renderTitle(title: string, italicWord?: string) {
 }
 
 export default function CTABanner({
-  title = "Word lid van de club",
-  subtitle = "Sluit je aan bij een groeiend netwerk van Nederlandstalige ondernemers op Mallorca.",
+  title = "Word onderdeel van het netwerk.",
+  subtitle = "Sluit je aan bij een groeiend netwerk van Nederlandstalige ondernemers op Mallorca. Ontmoet ons op de volgende bijeenkomst.",
   buttonText = "Lid worden",
-  buttonHref = "/lid-worden",
-  italicWord = "lid",
+  buttonHref = "/intake?tier=member",
+  italicWord = "onderdeel",
 }: Props) {
   return (
-    <section className="relative bg-ink-2 overflow-hidden hairline-t">
-      <AuroraBg variant="intense" />
-      <div className="noise" />
+    <section className="relative bg-ocean-mid py-24 md:py-28 px-6 md:px-[5vw] text-center overflow-hidden">
+      {/* NBCM watermark */}
+      <span
+        aria-hidden
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-heading font-light text-[12rem] md:text-[18rem] text-sunset/[0.05] tracking-[0.2em] pointer-events-none select-none whitespace-nowrap leading-none"
+      >
+        NBCM
+      </span>
 
-      <div className="relative container-site py-28 md:py-40">
-        <div className="max-w-5xl">
-          <Reveal>
-            <div className="flex items-center gap-3">
-              <span className="h-px w-12 bg-terracotta" />
-              <span className="text-[11px] font-medium tracking-[0.24em] uppercase text-terracotta">
-                NBCM
-              </span>
-            </div>
-          </Reveal>
+      <div className="relative">
+        <Reveal>
+          <h2 className="font-heading font-light leading-[1.08] text-[clamp(2.2rem,5vw,4.5rem)] text-warm-text mb-6 max-w-[820px] mx-auto">
+            {renderTitle(title, italicWord)}
+          </h2>
+        </Reveal>
 
+        {subtitle && (
           <Reveal delay={0.08}>
-            <h2 className="mt-10 font-heading text-5xl md:text-7xl lg:text-8xl font-semibold text-pearl tracking-[-0.04em] leading-[0.95] text-balance">
-              {renderTitle(title, italicWord)}
-            </h2>
+            <p className="text-[1rem] text-warm-text/60 max-w-[480px] mx-auto leading-[1.85] mb-10">
+              {subtitle}
+            </p>
           </Reveal>
+        )}
 
-          {subtitle && (
-            <Reveal delay={0.16}>
-              <p className="mt-10 max-w-xl text-pearl-80 text-lg md:text-xl leading-relaxed">
-                {subtitle}
-              </p>
-            </Reveal>
-          )}
-
-          <Reveal delay={0.24}>
-            <div className="mt-14">
-              <Link
-                href={buttonHref}
-                className="group inline-flex items-center gap-2 rounded-full bg-terracotta px-10 py-5 text-white font-medium transition-all hover:bg-terracotta-light hover:scale-[1.02]"
-              >
-                {buttonText}
-                <ArrowUpRight
-                  size={18}
-                  className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                  aria-hidden="true"
-                />
-              </Link>
-            </div>
-          </Reveal>
-        </div>
+        <Reveal delay={0.16}>
+          <div className="flex gap-4 justify-center flex-wrap">
+            <Link
+              href={buttonHref}
+              className="inline-flex items-center px-8 py-3.5 bg-sunset text-white text-[0.78rem] font-medium tracking-[0.08em] uppercase font-body transition-colors hover:bg-sunset-light"
+            >
+              {buttonText}
+            </Link>
+            <Link
+              href="/events"
+              className="inline-flex items-center px-8 py-3.5 bg-transparent text-warm-text border border-warm-text/25 text-[0.78rem] font-medium tracking-[0.08em] uppercase font-body transition-colors hover:border-warm-text"
+            >
+              Bekijk events
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );

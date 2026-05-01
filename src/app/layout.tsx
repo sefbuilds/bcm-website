@@ -1,18 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Montserrat } from "next/font/google";
+import { Outfit, Cormorant_Garamond } from "next/font/google";
 import { SITE_INFO } from "@/lib/constants";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
@@ -39,9 +41,9 @@ export default function RootLayout({
   return (
     <html
       lang="nl"
-      className={`${inter.variable} ${montserrat.variable}`}
+      className={`${outfit.variable} ${cormorant.variable}`}
     >
-      <body className="min-h-screen flex flex-col bg-ink text-pearl">
+      <body className="min-h-screen flex flex-col bg-cream text-text">
         {children}
       </body>
     </html>

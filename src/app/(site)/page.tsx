@@ -1,8 +1,9 @@
 import Hero from "@/components/Hero";
-import Stats from "@/components/Stats";
+import HeroCards from "@/components/HeroCards";
+import PartnerTicker from "@/components/PartnerTicker";
+import Manifesto from "@/components/Manifesto";
 import IntroSection from "@/components/IntroSection";
 import Motto from "@/components/Motto";
-import ValueProps from "@/components/ValueProps";
 import NextEvent from "@/components/NextEvent";
 import Members from "@/components/Members";
 import Testimonial from "@/components/Testimonial";
@@ -20,43 +21,44 @@ export default function Home() {
       <Hero
         title={SITE_INFO.tagline}
         subtitle={SITE_INFO.subtagline}
-        ctaText="Sluit je aan"
+        ctaText="Word lid van de club"
         ctaHref="/intake?tier=member"
         italicWord="samen sterker."
         showBento
       />
 
-      <Stats />
+      <HeroCards />
+
+      <PartnerTicker />
+
+      <Manifesto />
 
       <IntroSection
-        eyebrow="Over NBCM"
-        heading="Sinds 2019 het zakelijke thuis voor Nederlandstalige ondernemers."
-        italicWord="zakelijke thuis"
-        highlight="Warme gesprekken, oprechte connecties, échte samenwerkingen."
-        body="Wat begon als een informele groep is uitgegroeid tot een actieve business club voor Nederlanders, Vlamingen en Zuid-Afrikanen op Mallorca. Onder het genot van een hapje en drankje delen we kennis, verkennen we samenwerkingen en bouwen we aan een sterk professioneel netwerk."
-        imageLabel="Mediterraans diner op Mallorca"
+        eyebrow="Ons verhaal"
+        heading="Een informele groep die uitgroeide tot een hechte business club."
+        italicWord="hechte business club"
+        highlight="Geen verkooppraatjes, maar oprechte gesprekken, gedeelde kennis en samenwerkingen die ontstaan uit vertrouwen."
+        body={[
+          "NBCM ontstond in 2019 uit de behoefte van een paar ondernemers om in hun eigen taal zaken te bespreken en elkaar écht te leren kennen. Wat begon rond een lange tafel is uitgegroeid tot een actieve club voor Nederlanders, Vlamingen en Zuid-Afrikanen op Mallorca.",
+          "Vandaag organiseren we borrels, diners en masterclasses op de mooiste plekken van het eiland.",
+        ]}
+        imageLabel="Mallorca — kust"
         imageUrl={STOCK_IMAGES.mediterraneanDinner}
       />
 
       <Motto />
 
-      <ValueProps
-        eyebrow="Waarom NBCM"
-        heading="Waarom leden aansluiten."
-        italicWord="aansluiten"
-      />
+      <Members />
 
       <NextEvent />
-
-      <Members />
 
       <Testimonial />
 
       <MembershipTiers />
 
-      <Sponsors />
-
       <Bestuur />
+
+      <Sponsors />
 
       <CTABanner />
     </>
