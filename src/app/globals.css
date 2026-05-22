@@ -1,0 +1,248 @@
+@import "tailwindcss";
+
+@theme {
+  /* === NBCM v13 brand tokens === */
+
+  /* Cream / sand backgrounds */
+  --color-cream: #fdfaf5;
+  --color-sand: #f0e9dc;
+  --color-warm-text: #f2ede4;
+
+  /* Ocean / deep-night backgrounds */
+  --color-ocean: #1c3b5a;
+  --color-ocean-deep: #0f2035;
+  --color-ocean-mid: #264d6e;
+
+  /* Primary accent — sunset */
+  --color-sunset: #d4622a;
+  --color-sunset-light: #e8814e;
+
+  /* Text */
+  --color-text: #1a2530;
+  --color-text-muted: #6b7e8a;
+
+  /* === Legacy aliases — keep existing components working === */
+  /* Light backgrounds */
+  --color-ink: #fdfaf5;
+  --color-ink-2: #f0e9dc;
+  --color-ink-3: #e8dcc5;
+  --color-ink-4: #ddcdb1;
+
+  /* Pearl = primary text on light */
+  --color-pearl: #1a2530;
+  --color-pearl-80: #3a4a55;
+  --color-pearl-60: #6b7e8a;
+  --color-pearl-40: #a3a9af;
+
+  /* Terracotta = sunset alias */
+  --color-terracotta: #d4622a;
+  --color-terracotta-light: #e8814e;
+  --color-terracotta-dark: #9e4420;
+
+  /* Gold (used for some accents in dark sections) */
+  --color-gold: #d4622a;
+  --color-gold-light: #e8814e;
+
+  /* Olive */
+  --color-olive: #6b8f71;
+  --color-olive-light: #c3cbab;
+
+  /* Deep blue */
+  --color-deep-blue: #1c3b5a;
+  --color-deep-blue-80: #264d6e;
+  --color-deep-blue-60: #3e617f;
+  --color-deep-blue-light: #8aafbf;
+
+  --color-navy: #0f2035;
+  --color-navy-2: #1c3b5a;
+  --color-navy-light: #5b6f94;
+
+  --color-hairline: rgb(212 98 42 / 0.15);
+  --color-hairline-strong: rgb(212 98 42 / 0.28);
+
+  --font-heading: var(--font-cormorant), Georgia, "Times New Roman", serif;
+  --font-body: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+
+  --container-site: 1180px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-cream);
+  }
+
+  body {
+    background-color: var(--color-cream);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--color-text);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-sunset);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: var(--color-sunset);
+    color: #fff;
+  }
+}
+
+@layer utilities {
+  .container-site {
+    width: 100%;
+    max-width: var(--container-site);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-site {
+      padding-inline: 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container-site {
+      padding-inline: 3rem;
+    }
+  }
+
+  /* v13 calls these "sections" — eyebrow + label + body utilities */
+  .label {
+    font-size: 0.6rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--color-sunset);
+    font-weight: 500;
+  }
+
+  .label-light {
+    color: var(--color-sunset-light);
+    opacity: 0.85;
+  }
+
+  /* Grain overlay (reused from v13) */
+  .grain {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  }
+
+  /* Frosted card on light surfaces — kept for legacy components */
+  .glass {
+    background-color: rgb(255 255 255 / 0.55);
+    border: 1px solid rgb(212 98 42 / 0.12);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+    backdrop-filter: blur(18px) saturate(1.1);
+  }
+
+  .glass-strong {
+    background-color: rgb(255 255 255 / 0.7);
+    border: 1px solid rgb(212 98 42 / 0.18);
+    -webkit-backdrop-filter: blur(22px) saturate(1.2);
+    backdrop-filter: blur(22px) saturate(1.2);
+  }
+
+  /* Glass on dark sections */
+  .glass-dark {
+    background-color: rgb(15 32 53 / 0.6);
+    border: 1px solid rgb(212 98 42 / 0.18);
+    -webkit-backdrop-filter: blur(18px) saturate(1.1);
+    backdrop-filter: blur(18px) saturate(1.1);
+  }
+
+  .hairline-t {
+    border-top: 1px solid var(--color-hairline);
+  }
+  .hairline-b {
+    border-bottom: 1px solid var(--color-hairline);
+  }
+  .hairline {
+    border: 1px solid var(--color-hairline);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .noise {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: multiply;
+    opacity: 0.18;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.15 0 0 0 0 0.2 0 0 0 0.75 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+    background-size: 180px 180px;
+  }
+
+  .mask-fade-right {
+    -webkit-mask-image: linear-gradient(to right, black 80%, transparent);
+    mask-image: linear-gradient(to right, black 80%, transparent);
+  }
+  .mask-fade-x {
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes aurora-drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(3%, -4%) scale(1.05); }
+    66% { transform: translate(-2%, 3%) scale(0.98); }
+  }
+
+  @keyframes bounceDown {
+    0%, 100% { transform: translateY(0); opacity: 0.6; }
+    50% { transform: translateY(6px); opacity: 1; }
+  }
+
+  .animate-bounce-down {
+    animation: bounceDown 2.4s ease-in-out infinite;
+  }
+
+  .animate-ticker {
+    animation: ticker 28s linear infinite;
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.8s ease-out both;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* v13 keeps the brand club-feel with no rounded corners on cards */
+  .no-radius { border-radius: 0; }
+}
